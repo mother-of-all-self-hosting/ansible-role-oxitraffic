@@ -1,0 +1,42 @@
+[Unit]
+Description=OxiTraffic: Website traffic tracker ({{ oxitraffic_identifier }})
+{% for service in oxitraffic_systemd_required_services_list %}
+Requires={{ service }}
+After={{ service }}
+{% endfor %}
+DefaultDependencies=no
+
+[Service]
+Type=simple
+ExecStartPre=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} kill {{ oxitraffic_identifier }} 2>/dev/null || true'
+ExecStartPre=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} rm {{ oxitraffic_identifier }} 2>/dev/null || true'
+
+ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
+                --rm \
+                --name={{ oxitraffic_identifier }} \
+                --log-driver=none \
+                --user={{ oxitraffic_uid }}:{{ oxitraffic_gid }} \
+                --cap-drop=ALL \
+                {% if oxitraffic_container_http_host_bind_port %}
+                -p {{ oxitraffic_container_http_host_bind_port }}:{{ oxitraffic_container_http_port }} \
+                {% endif %}
+                --label-file={{ oxitraffic_config_path }}/labels \
+                --network={{ oxitraffic_container_network }} \
+                --mount type=bind,src={{ oxitraffic_data_path }},dst=/volumes/data \
+                --read-only \
+                {{ oxitraffic_container_image }}
+
+{% for network in oxitraffic_container_additional_networks %}
+ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} network connect {{ network }} {{ oxitraffic_identifier }}
+{% endfor %}
+
+ExecStart={{ devture_systemd_docker_base_host_command_docker }} start --attach {{ oxitraffic_identifier }}
+
+ExecStop=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} kill {{ oxitraffic_identifier }} 2>/dev/null || true'
+ExecStop=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} rm {{ oxitraffic_identifier }} 2>/dev/null || true'
+Restart=always
+RestartSec=30
+SyslogIdentifier={{ oxitraffic_identifier }}
+
+[Install]
+WantedBy=multi-user.target

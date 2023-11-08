@@ -1,0 +1,55 @@
+---
+
+- name: Ensure oxitraffic network is created in Docker
+  community.docker.docker_network:
+    name: "{{ oxitraffic_container_network }}"
+    driver: bridge
+
+
+- name: Ensure oxitraffic path exists
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: 0700
+    owner: "{{ oxitraffic_uid }}"
+    group: "{{ oxitraffic_gid }}"
+  with_items:
+    - {path: "{{ oxitraffic_base_path }}", when: true}
+
+- name: Ensure oxitraffic data path exists
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: 0755
+    owner: "{{ oxitraffic_uid }}"
+    group: "{{ oxitraffic_gid }}"
+  with_items:
+    - {path: "{{ oxitraffic_data_path }}", when: true}
+
+
+- name: Ensure oxitraffic traefik labels are installed
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/labels.j2"
+    dest: "{{ oxitraffic_config_path }}/labels"
+    owner: "{{ oxitraffic_uid }}"
+    group: "{{ oxitraffic_gid }}"
+    mode: 0640
+
+- name: Ensure oxitraffic configuration is deployed
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/config.toml.j2"
+    dest: "{{ oxitraffic_config_path }}"
+    owner: "{{ oxitraffic_uid }}"
+    group: "{{ oxitraffic_gid }}"
+    mode: 0640
+
+- name: Ensure oxitraffic container image is pulled
+  community.docker.docker_image:
+    name: "{{ oxitraffic_container_image }}"
+    source: "{{ 'pull' if ansible_version.major > 2 or ansible_version.minor > 7 else omit }}"
+
+- name: Ensure oxitraffic.service installed
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/systemd/oxitraffic.service.j2"
+    dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ oxitraffic_identifier }}.service"
+    mode: 0644

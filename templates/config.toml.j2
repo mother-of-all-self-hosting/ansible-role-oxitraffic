@@ -1,0 +1,21 @@
+# Can be omitted because this is the default value.
+socket_address = "0.0.0.0:{{ oxitraffic_container_http_port }}"
+
+base_url = "{{ oxitraffic_hostname }}"
+
+tracked_origin = "{{ oxitraffic_tracked_origin }}"
+# In case both OxiTraffic and your website are in a local network and `website` can be resolved to the local IP address of the your website.
+# Omit this option to use the value of `tracked_origin` instead.
+tracked_origin_callback = "{{ oxitraffic_tracked_origin_callback }}"
+
+[db]
+host = "{{ oxitraffic_database_hostname }}"
+port = "{{ oxitraffic_database_port }}"
+username = "{{ oxitraffic_database_username }}"
+password = "{{ oxitraffic_database_password }}"
+database = "{{ oxitraffic_database_name }}"
+
+[utc_offset]
+hours = "{{ oxitraffic_utc_offset_hours }}"
+# Can be omitted because 0 is the default.
+minutes = "{[ oxitraffic_utc_offset_minutes ]}"

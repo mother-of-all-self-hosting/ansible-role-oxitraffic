@@ -1,0 +1,40 @@
+---
+
+- block:
+    - when: oxitraffic_enabled | bool
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/validate_config.yml"
+  tags:
+    - setup-all
+    - setup-oxitraffic
+    - install-all
+    - install-oxitraffic
+
+- block:
+    - when: oxitraffic_enabled | bool
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/install.yml"
+  tags:
+    - setup-all
+    - setup-oxitraffic
+    - install-all
+    - install-oxitraffic
+
+- block:
+    - when: not oxitraffic_enabled | bool
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/uninstall.yml"
+  tags:
+    - setup-all
+    - setup-oxitraffic
+
+- block:
+    - when: oxitraffic_enabled | bool
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/add_users_auto.yml"
+  tags:
+    - ensure-oxitraffic-users-created
+    - ensure-users-created
+
+- block:
+    - when: oxitraffic_enabled | bool
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/add_user_manual.yml"
+  tags:
+    - oxitraffic-add-user
+    - oxitraffic-add-admin

@@ -1,0 +1,23 @@
+---
+
+- name: Check existence of oxitraffic systemd service
+  ansible.builtin.stat:
+    path: "{{ devture_systemd_docker_base_systemd_path }}/{{ oxitraffic_identifier }}.service"
+  register: oxitraffic_service_stat
+
+- when: oxitraffic_service_stat.stat.exists | bool
+  block:
+    - name: Ensure oxitraffic service is stopped
+      ansible.builtin.service:
+        name: "{{ oxitraffic_identifier }}"
+        state: stopped
+        daemon_reload: true
+    - name: Ensure oxitraffic service doesn't exist
+      ansible.builtin.file:
+        dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ oxitraffic_identifier }}.service"
+        state: absent
+
+    - name: Ensure oxitraffic base path is files deleted (make sure to delete node data)
+      ansible.builtin.file:
+        path: "{{ oxitraffic_base_path }}"
+        state: absent
