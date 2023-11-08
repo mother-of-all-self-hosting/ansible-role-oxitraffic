@@ -20,7 +20,7 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
                 {% if oxitraffic_container_http_host_bind_port %}
                 -p {{ oxitraffic_container_http_host_bind_port }}:{{ oxitraffic_container_http_port }} \
                 {% endif %}
-                --label-file={{ oxitraffic_config_path }}/labels \
+                --label-file={{ oxitraffic_base_path }}/labels \
                 --network={{ oxitraffic_container_network }} \
                 --mount type=bind,src={{ oxitraffic_data_path }},dst=/volumes/data \
                 --read-only \

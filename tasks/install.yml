@@ -30,7 +30,7 @@
 - name: Ensure oxitraffic traefik labels are installed
   ansible.builtin.template:
     src: "{{ role_path }}/templates/labels.j2"
-    dest: "{{ oxitraffic_config_path }}/labels"
+    dest: "{{ oxitraffic_base_path }}/labels"
     owner: "{{ oxitraffic_uid }}"
     group: "{{ oxitraffic_gid }}"
     mode: 0640
