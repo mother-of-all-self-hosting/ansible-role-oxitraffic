@@ -23,7 +23,7 @@ oxitraffic_config_path: "{{ oxitraffic_data_path }}/config.toml"
 
 oxitraffic_systemd_required_services_list: ['docker.service']
 
-oxitraffic_version: 0.6.1
+oxitraffic_version: 0.7.0
 
 oxitraffic_container_image: "{{ oxitraffic_container_image_registry_prefix }}mo8it/oxitraffic:{{ oxitraffic_container_image_tag }}"
 oxitraffic_container_image_registry_prefix: docker.io/
