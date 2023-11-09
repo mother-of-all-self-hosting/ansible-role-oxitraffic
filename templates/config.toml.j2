@@ -1,7 +1,7 @@
 # Can be omitted because this is the default value.
 socket_address = "0.0.0.0:{{ oxitraffic_container_http_port }}"
 
-base_url = "{{ oxitraffic_hostname }}"
+base_url = "https://{{ oxitraffic_hostname }}"
 
 tracked_origin = "{{ oxitraffic_tracked_origin }}"
 # In case both OxiTraffic and your website are in a local network and `website` can be resolved to the local IP address of the your website.
