@@ -18,12 +18,13 @@ oxitraffic_uid: ''
 oxitraffic_gid: ''
 
 oxitraffic_base_path: "/{{ oxitraffic_identifier }}"
-oxitraffic_data_path: "{{ oxitraffic_base_path }}/data"
-oxitraffic_config_path: "{{ oxitraffic_data_path }}/config.toml"
+oxitraffic_log_path: "{{ oxitraffic_base_path }}/logs"
+oxitraffic_config_path: "{{ oxitraffic_base_path }}/config.toml"
+oxitraffic_legacy_data_path: "{{ oxitraffic_base_path }}/data"
 
 oxitraffic_systemd_required_services_list: ['docker.service']
 
-oxitraffic_version: 0.7.0
+oxitraffic_version: 0.8.0
 
 oxitraffic_container_image: "{{ oxitraffic_container_image_registry_prefix }}mo8it/oxitraffic:{{ oxitraffic_container_image_tag }}"
 oxitraffic_container_image_registry_prefix: docker.io/

@@ -27,14 +27,9 @@
 
 - block:
     - when: oxitraffic_enabled | bool
-      ansible.builtin.include_tasks: "{{ role_path }}/tasks/add_users_auto.yml"
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/migrate_0.7_to_0.8.yml"
   tags:
-    - ensure-oxitraffic-users-created
-    - ensure-users-created
-
-- block:
-    - when: oxitraffic_enabled | bool
-      ansible.builtin.include_tasks: "{{ role_path }}/tasks/add_user_manual.yml"
-  tags:
-    - oxitraffic-add-user
-    - oxitraffic-add-admin
+    - setup-all
+    - setup-oxitraffic
+    - install-all
+    - install-oxitraffic

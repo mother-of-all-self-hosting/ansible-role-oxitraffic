@@ -22,7 +22,8 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
                 {% endif %}
                 --label-file={{ oxitraffic_base_path }}/labels \
                 --network={{ oxitraffic_container_network }} \
-                --mount type=bind,src={{ oxitraffic_data_path }},dst=/volumes/data \
+                --mount type=bind,src={{ oxitraffic_log_path }},dst=/var/log/oxitraffic \
+                --mount type=bind,src={{ oxitraffic_config_path }},dst=/volumes/config.toml,readonly \
                 --read-only \
                 {{ oxitraffic_container_image }}
 

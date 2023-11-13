@@ -24,7 +24,7 @@
     owner: "{{ oxitraffic_uid }}"
     group: "{{ oxitraffic_gid }}"
   with_items:
-    - {path: "{{ oxitraffic_data_path }}", when: true}
+    - {path: "{{ oxitraffic_log_path }}", when: true}
 
 
 - name: Ensure oxitraffic traefik labels are installed
