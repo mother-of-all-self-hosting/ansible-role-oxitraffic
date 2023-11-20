@@ -24,7 +24,7 @@ oxitraffic_legacy_data_path: "{{ oxitraffic_base_path }}/data"
 
 oxitraffic_systemd_required_services_list: ['docker.service']
 
-oxitraffic_version: 0.8.0
+oxitraffic_version: 0.9.0
 
 oxitraffic_container_image: "{{ oxitraffic_container_image_registry_prefix }}mo8it/oxitraffic:{{ oxitraffic_container_image_tag }}"
 oxitraffic_container_image_registry_prefix: docker.io/
