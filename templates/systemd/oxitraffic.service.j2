@@ -1,3 +1,9 @@
+{#
+SPDX-FileCopyrightText: 2023 Julian-Samuel Gebühr
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+#}
+
 [Unit]
 Description=OxiTraffic: Website traffic tracker ({{ oxitraffic_identifier }})
 {% for service in oxitraffic_systemd_required_services_list %}
