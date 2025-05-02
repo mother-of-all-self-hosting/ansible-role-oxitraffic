@@ -1,4 +1,9 @@
 # SPDX-FileCopyrightText: 2023 Julian-Samuel Gebühr
+# SPDX-FileCopyrightText: 2023 - 2024 Nikita Chernyi
+# SPDX-FileCopyrightText: 2023 - 2025 Slavi Pantaleev
+# SPDX-FileCopyrightText: 2024 Sergio Durigan Junior
+# SPDX-FileCopyrightText: 2025 MASH project contributors
+# SPDX-FileCopyrightText: 2025 Suguru Hirahara
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -25,8 +30,6 @@ oxitraffic_base_path: "/{{ oxitraffic_identifier }}"
 oxitraffic_log_path: "{{ oxitraffic_base_path }}/logs"
 oxitraffic_config_path: "{{ oxitraffic_base_path }}/config.toml"
 oxitraffic_legacy_data_path: "{{ oxitraffic_base_path }}/data"
-
-oxitraffic_systemd_required_services_list: ['docker.service']
 
 oxitraffic_version: 0.10.1
 
@@ -143,6 +146,11 @@ oxitraffic_floc_optout_enabled: true
 # See: `oxitraffic_http_header_strict_transport_security`
 oxitraffic_hsts_preload_enabled: false
 
+# List of systemd services that the OxiTraffic systemd service depends on
+oxitraffic_systemd_required_services_list: "{{ oxitraffic_systemd_required_services_list_default + oxitraffic_systemd_required_services_list_auto + oxitraffic_systemd_required_services_list_custom }}"
+oxitraffic_systemd_required_services_list_default: "{{ [devture_systemd_docker_base_docker_service_name] if devture_systemd_docker_base_docker_service_name else [] }}"
+oxitraffic_systemd_required_services_list_auto: []
+oxitraffic_systemd_required_services_list_custom: []
 
 # oxitraffic_container_labels_additional_labels contains a multiline string with additional labels to add to the container label file.
 # See `roles/custom/collabora_online/templates/labels.j2` for details.
