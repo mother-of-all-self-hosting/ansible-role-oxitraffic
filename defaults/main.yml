@@ -12,6 +12,7 @@
 oxitraffic_enabled: true
 oxitraffic_identifier: oxitraffic
 
+# The hostname at which OxiTraffic is served.
 oxitraffic_hostname: ''
 
 # Example: "https://oxitraffic.example.org"
@@ -40,6 +41,7 @@ oxitraffic_container_image_registry_prefix_upstream: "{{ oxitraffic_container_im
 oxitraffic_container_image_registry_prefix_upstream_default: docker.io/
 oxitraffic_container_image_force_pull: "{{ oxitraffic_container_image.endswith(':latest') }}"
 
+# The base container network. It will be auto-created by this role if it doesn't exist already.
 oxitraffic_container_network: '{{ oxitraffic_identifier }}'
 
 # The port number in the container
