@@ -46,7 +46,9 @@ oxitraffic_container_http_port: 8080
 # A list of additional container networks that the container would be connected to.
 # The role does not create these networks, so make sure they already exist.
 # Use this to expose this container to a reverse proxy, which runs in a different container network.
-oxitraffic_container_additional_networks: []
+oxitraffic_container_additional_networks: "{{ oxitraffic_container_additional_networks_auto + oxitraffic_container_additional_networks_custom }}"
+oxitraffic_container_additional_networks_auto: []
+oxitraffic_container_additional_networks_custom: []
 
 # oxitraffic_container_labels_traefik_enabled controls whether labels to assist a Traefik reverse-proxy will be attached to the container.
 # See `roles/custom/oxitraffic_oxitraffic/templates/labels.j2` for details.
