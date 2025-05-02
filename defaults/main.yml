@@ -27,6 +27,8 @@ oxitraffic_gid: ''
 # The hostname at which OxiTraffic is served.
 oxitraffic_hostname: ''
 
+oxitraffic_scheme: https
+
 oxitraffic_container_image: "{{ oxitraffic_container_image_registry_prefix }}mo8it/oxitraffic:{{ oxitraffic_container_image_tag }}"
 oxitraffic_container_image_tag: "{{ oxitraffic_version }}"
 oxitraffic_container_image_registry_prefix: "{{ oxitraffic_container_image_registry_prefix_upstream }}"
