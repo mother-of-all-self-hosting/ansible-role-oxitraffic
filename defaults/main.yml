@@ -10,29 +10,20 @@
 ---
 
 oxitraffic_enabled: true
+
 oxitraffic_identifier: oxitraffic
-
-# The hostname at which OxiTraffic is served.
-oxitraffic_hostname: ''
-
-# Example: "https://oxitraffic.example.org"
-oxitraffic_tracked_origin: ''
-# In case both OxiTraffic and your website are in a local network and `website` can be resolved to the local IP address of the your website.
-# Defaults to the value of `oxitraffic_tracked_origin`.
-oxitraffic_tracked_origin_callback: "{{ oxitraffic_tracked_origin }}"
-
-oxitraffic_utc_offset_hours: "0"
-oxitraffic_utc_offset_minutes: "0"
-
-oxitraffic_uid: ''
-oxitraffic_gid: ''
-
 oxitraffic_base_path: "/{{ oxitraffic_identifier }}"
 oxitraffic_log_path: "{{ oxitraffic_base_path }}/logs"
 oxitraffic_config_path: "{{ oxitraffic_base_path }}/config.toml"
 oxitraffic_legacy_data_path: "{{ oxitraffic_base_path }}/data"
 
 oxitraffic_version: v0.10.1
+
+oxitraffic_uid: ''
+oxitraffic_gid: ''
+
+# The hostname at which OxiTraffic is served.
+oxitraffic_hostname: ''
 
 oxitraffic_container_image: "{{ oxitraffic_container_image_registry_prefix }}mo8it/oxitraffic:{{ oxitraffic_container_image_tag }}"
 oxitraffic_container_image_tag: "{{ oxitraffic_version }}"
@@ -41,30 +32,21 @@ oxitraffic_container_image_registry_prefix_upstream: "{{ oxitraffic_container_im
 oxitraffic_container_image_registry_prefix_upstream_default: docker.io/
 oxitraffic_container_image_force_pull: "{{ oxitraffic_container_image.endswith(':latest') }}"
 
+# Controls whether the oxitraffic container exposes its HTTP port (as defined by `oxitraffic_container_http_port`).
+#
+# Takes an "<ip>:<port>" or "<port>" value (e.g. "127.0.0.1:8731"), or empty string to not expose.
+oxitraffic_container_http_host_bind_port: ""
+
 # The base container network. It will be auto-created by this role if it doesn't exist already.
 oxitraffic_container_network: '{{ oxitraffic_identifier }}'
 
 # The port number in the container
 oxitraffic_container_http_port: 8080
 
-# Controls whether the oxitraffic container exposes its HTTP port (as defined by `oxitraffic_container_http_port`).
-#
-# Takes an "<ip>:<port>" or "<port>" value (e.g. "127.0.0.1:8731"), or empty string to not expose.
-oxitraffic_container_http_host_bind_port: ""
-
 # A list of additional container networks that the container would be connected to.
 # The role does not create these networks, so make sure they already exist.
 # Use this to expose this container to a reverse proxy, which runs in a different container network.
 oxitraffic_container_additional_networks: []
-
-oxitraffic_database_hostname: ''
-oxitraffic_database_port: 5432
-oxitraffic_database_name: oxitraffic
-oxitraffic_database_username: oxitraffic
-oxitraffic_database_password: ''
-# Use this to set the sslmode parameter of the SSL connection
-# By default, we expect a local container (without SSL), so attempting SSL connections is not necessary.
-oxitraffic_database_sslmode: disable
 
 # oxitraffic_container_labels_traefik_enabled controls whether labels to assist a Traefik reverse-proxy will be attached to the container.
 # See `roles/custom/oxitraffic_oxitraffic/templates/labels.j2` for details.
@@ -159,3 +141,21 @@ oxitraffic_systemd_required_services_list_custom: []
 #   my.label=1
 #   another.label="here"
 oxitraffic_container_labels_additional_labels: ''
+
+# Example: "https://oxitraffic.example.org"
+oxitraffic_tracked_origin: ''
+# In case both OxiTraffic and your website are in a local network and `website` can be resolved to the local IP address of the your website.
+# Defaults to the value of `oxitraffic_tracked_origin`.
+oxitraffic_tracked_origin_callback: "{{ oxitraffic_tracked_origin }}"
+
+oxitraffic_utc_offset_hours: "0"
+oxitraffic_utc_offset_minutes: "0"
+
+oxitraffic_database_hostname: ''
+oxitraffic_database_port: 5432
+oxitraffic_database_name: oxitraffic
+oxitraffic_database_username: oxitraffic
+oxitraffic_database_password: ''
+# Use this to set the sslmode parameter of the SSL connection
+# By default, we expect a local container (without SSL), so attempting SSL connections is not necessary.
+oxitraffic_database_sslmode: disable
