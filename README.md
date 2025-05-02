@@ -1,35 +1,17 @@
 <!--
-SPDX-FileCopyrightText: 2023 Julian-Samuel Gebühr
+SPDX-FileCopyrightText: 2023 Slavi Pantaleev
+SPDX-FileCopyrightText: 2025 Suguru Hirahara
 
 SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-# OxiTraffic Ansible Role
+# OxiTraffic Ansible role
 
-![OxiTraffic Logo](assets/logo.svg)
+This is an [Ansible](https://www.ansible.com/) role which installs [OxiTraffic](https://codeberg.org/mo8it/oxitraffic) to run as a [Docker](https://www.docker.com/) container wrapped in a systemd service.
 
-OxiTraffic is a self-hosted, simple and privacy respecting website traffic tracker. This role helps you to set up OxiTraffic:
+This role *implicitly* depends on:
 
-- with everything run in [Docker](https://www.docker.com/) containers
-- powered by [the official OxiTraffic container image](https://hub.docker.com/r/mo8it/oxitraffic)
+- [`com.devture.ansible.role.playbook_help`](https://github.com/devture/com.devture.ansible.role.playbook_help)
+- [`com.devture.ansible.role.systemd_docker_base`](https://github.com/devture/com.devture.ansible.role.systemd_docker_base)
 
-
-## Installing
-
-To configure and install OxiTraffic on your own server(s), you should use a playbook like [Mother of all self-hosting](https://github.com/mother-of-all-self-hosting/mash-playbook) or write your own.
-
-# Configuring this role for your playbook
-
-```
-oxitraffic_enabled: true
-oxitraffic_hostname: 'example.org'
-
-oxitraffic_db_host:
-
-oxitraffic_db_name:
-oxitraffic_db_user:
-oxitraffic_db_password:
-```
-
-# Developer Notes
-
+Check [defaults/main.yml](defaults/main.yml) for the full list of supported options.
