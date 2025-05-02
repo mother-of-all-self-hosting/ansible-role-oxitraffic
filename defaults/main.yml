@@ -18,6 +18,7 @@ oxitraffic_log_path: "{{ oxitraffic_base_path }}/logs"
 oxitraffic_config_path: "{{ oxitraffic_base_path }}/config.toml"
 oxitraffic_legacy_data_path: "{{ oxitraffic_base_path }}/data"
 
+# renovate: datasource=docker depName=mo8it/oxitraffic versioning=semver
 oxitraffic_version: v0.10.1
 
 oxitraffic_uid: ''
