@@ -135,6 +135,9 @@ oxitraffic_systemd_required_services_list_default: "{{ [devture_systemd_docker_b
 oxitraffic_systemd_required_services_list_auto: []
 oxitraffic_systemd_required_services_list_custom: []
 
+# List of systemd services that the OxiTraffic systemd service wants
+oxitraffic_systemd_wanted_services_list: []
+
 # oxitraffic_container_labels_additional_labels contains a multiline string with additional labels to add to the container label file.
 # See `roles/custom/collabora_online/templates/labels.j2` for details.
 #
