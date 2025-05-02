@@ -26,14 +26,14 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
                 --log-driver=none \
                 --user={{ oxitraffic_uid }}:{{ oxitraffic_gid }} \
                 --cap-drop=ALL \
+                --read-only \
+                --network={{ oxitraffic_container_network }} \
                 {% if oxitraffic_container_http_host_bind_port %}
                 -p {{ oxitraffic_container_http_host_bind_port }}:{{ oxitraffic_container_http_port }} \
                 {% endif %}
                 --label-file={{ oxitraffic_base_path }}/labels \
-                --network={{ oxitraffic_container_network }} \
                 --mount type=bind,src={{ oxitraffic_log_path }},dst=/var/log/oxitraffic \
                 --mount type=bind,src={{ oxitraffic_config_path }},dst=/volumes/config.toml,readonly \
-                --read-only \
                 {{ oxitraffic_container_image }}
 
 {% for network in oxitraffic_container_additional_networks %}
@@ -44,6 +44,7 @@ ExecStart={{ devture_systemd_docker_base_host_command_docker }} start --attach {
 
 ExecStop=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} stop -t {{ devture_systemd_docker_base_container_stop_grace_time_seconds }} {{ oxitraffic_identifier }} 2>/dev/null || true'
 ExecStop=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} rm {{ oxitraffic_identifier }} 2>/dev/null || true'
+
 Restart=always
 RestartSec=30
 SyslogIdentifier={{ oxitraffic_identifier }}
