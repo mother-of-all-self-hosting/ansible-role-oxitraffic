@@ -31,11 +31,13 @@ oxitraffic_log_path: "{{ oxitraffic_base_path }}/logs"
 oxitraffic_config_path: "{{ oxitraffic_base_path }}/config.toml"
 oxitraffic_legacy_data_path: "{{ oxitraffic_base_path }}/data"
 
-oxitraffic_version: 0.10.1
+oxitraffic_version: v0.10.1
 
 oxitraffic_container_image: "{{ oxitraffic_container_image_registry_prefix }}mo8it/oxitraffic:{{ oxitraffic_container_image_tag }}"
-oxitraffic_container_image_registry_prefix: docker.io/
-oxitraffic_container_image_tag: "v{{ oxitraffic_version }}"
+oxitraffic_container_image_tag: "{{ oxitraffic_version }}"
+oxitraffic_container_image_registry_prefix: "{{ oxitraffic_container_image_registry_prefix_upstream }}"
+oxitraffic_container_image_registry_prefix_upstream: "{{ oxitraffic_container_image_registry_prefix_upstream_default }}"
+oxitraffic_container_image_registry_prefix_upstream_default: docker.io/
 oxitraffic_container_image_force_pull: "{{ oxitraffic_container_image.endswith(':latest') }}"
 
 oxitraffic_container_network: '{{ oxitraffic_identifier }}'
