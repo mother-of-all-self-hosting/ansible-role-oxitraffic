@@ -67,7 +67,6 @@ oxitraffic_container_labels_traefik_additional_request_headers: "{{ oxitraffic_c
 oxitraffic_container_labels_traefik_additional_request_headers_auto: {}
 oxitraffic_container_labels_traefik_additional_request_headers_custom: {}
 
-
 # Controls which additional headers to attach to all HTTP responses.
 # To add your own custom response headers, use `oxitraffic_container_labels_traefik_additional_response_headers_custom`
 oxitraffic_container_labels_traefik_additional_response_headers: "{{ oxitraffic_container_labels_traefik_additional_response_headers_auto | combine(oxitraffic_container_labels_traefik_additional_response_headers_custom) }}"
@@ -149,6 +148,7 @@ oxitraffic_container_labels_additional_labels: ''
 
 # Example: "https://oxitraffic.example.org"
 oxitraffic_tracked_origin: ''
+
 # In case both OxiTraffic and your website are in a local network and `website` can be resolved to the local IP address of the your website.
 # Defaults to the value of `oxitraffic_tracked_origin`.
 oxitraffic_tracked_origin_callback: "{{ oxitraffic_tracked_origin }}"
