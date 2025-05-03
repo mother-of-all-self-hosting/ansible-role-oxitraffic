@@ -46,11 +46,15 @@
   community.docker.docker_image:
     name: "{{ oxitraffic_container_image }}"
     source: "{{ 'pull' if ansible_version.major > 2 or ansible_version.minor > 7 else omit }}"
+    force_source: "{{ oxitraffic_container_image_force_pull if ansible_version.major > 2 or ansible_version.minor >= 8 else omit }}"
+    force: "{{ omit if ansible_version.major > 2 or ansible_version.minor >= 8 else oxitraffic_container_image_force_pull }}"
 
 - name: Ensure oxitraffic network is created
   community.docker.docker_network:
+    enable_ipv6: "{{ devture_systemd_docker_base_ipv6_enabled }}"
     name: "{{ oxitraffic_container_network }}"
     driver: bridge
+    driver_options: "{{ devture_systemd_docker_base_container_networks_driver_options }}"
 
 - name: Ensure oxitraffic.service is present
   ansible.builtin.template:
