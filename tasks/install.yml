@@ -1,14 +1,10 @@
 # SPDX-FileCopyrightText: 2023 Julian-Samuel Gebühr
+# SPDX-FileCopyrightText: 2023 - 2025 Slavi Pantaleev
+# SPDX-FileCopyrightText: 2025 Suguru Hirahara
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 ---
-
-- name: Ensure oxitraffic network is created in Docker
-  community.docker.docker_network:
-    name: "{{ oxitraffic_container_network }}"
-    driver: bridge
-
 
 - name: Ensure oxitraffic path exists
   ansible.builtin.file:
@@ -29,7 +25,6 @@
     group: "{{ oxitraffic_gid }}"
   with_items:
     - {path: "{{ oxitraffic_log_path }}", when: true}
-
 
 - name: Ensure oxitraffic traefik labels are installed
   ansible.builtin.template:
@@ -52,7 +47,12 @@
     name: "{{ oxitraffic_container_image }}"
     source: "{{ 'pull' if ansible_version.major > 2 or ansible_version.minor > 7 else omit }}"
 
-- name: Ensure oxitraffic.service installed
+- name: Ensure oxitraffic network is created
+  community.docker.docker_network:
+    name: "{{ oxitraffic_container_network }}"
+    driver: bridge
+
+- name: Ensure oxitraffic.service is present
   ansible.builtin.template:
     src: "{{ role_path }}/templates/systemd/oxitraffic.service.j2"
     dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ oxitraffic_identifier }}.service"
