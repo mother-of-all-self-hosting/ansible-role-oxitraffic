@@ -6,7 +6,7 @@
 
 ---
 
-- name: Ensure oxitraffic path exists
+- name: Ensure OxiTraffic path exists
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
@@ -16,7 +16,7 @@
   with_items:
     - {path: "{{ oxitraffic_base_path }}", when: true}
 
-- name: Ensure oxitraffic data path exists
+- name: Ensure OxiTraffic data path exists
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
@@ -26,7 +26,7 @@
   with_items:
     - {path: "{{ oxitraffic_log_path }}", when: true}
 
-- name: Ensure oxitraffic traefik labels are installed
+- name: Ensure OxiTraffic traefik labels are installed
   ansible.builtin.template:
     src: "{{ role_path }}/templates/labels.j2"
     dest: "{{ oxitraffic_base_path }}/labels"
@@ -34,7 +34,7 @@
     group: "{{ oxitraffic_gid }}"
     mode: 0640
 
-- name: Ensure oxitraffic configuration is deployed
+- name: Ensure OxiTraffic configuration is deployed
   ansible.builtin.template:
     src: "{{ role_path }}/templates/config.toml.j2"
     dest: "{{ oxitraffic_config_path }}"
@@ -42,14 +42,14 @@
     group: "{{ oxitraffic_gid }}"
     mode: 0640
 
-- name: Ensure oxitraffic container image is pulled
+- name: Ensure OxiTraffic container image is pulled
   community.docker.docker_image:
     name: "{{ oxitraffic_container_image }}"
     source: "{{ 'pull' if ansible_version.major > 2 or ansible_version.minor > 7 else omit }}"
     force_source: "{{ oxitraffic_container_image_force_pull if ansible_version.major > 2 or ansible_version.minor >= 8 else omit }}"
     force: "{{ omit if ansible_version.major > 2 or ansible_version.minor >= 8 else oxitraffic_container_image_force_pull }}"
 
-- name: Ensure oxitraffic network is created
+- name: Ensure OxiTraffic network is created
   community.docker.docker_network:
     enable_ipv6: "{{ devture_systemd_docker_base_ipv6_enabled }}"
     name: "{{ oxitraffic_container_network }}"
