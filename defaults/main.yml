@@ -142,7 +142,7 @@ oxitraffic_systemd_required_services_list_custom: []
 oxitraffic_systemd_wanted_services_list: []
 
 # oxitraffic_container_labels_additional_labels contains a multiline string with additional labels to add to the container label file.
-# See `roles/custom/collabora_online/templates/labels.j2` for details.
+# See `../templates/labels.j2` for details.
 #
 # Example:
 # oxitraffic_container_labels_additional_labels: |
