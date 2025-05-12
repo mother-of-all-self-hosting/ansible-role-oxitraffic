@@ -55,7 +55,7 @@ oxitraffic_container_additional_networks_auto: []
 oxitraffic_container_additional_networks_custom: []
 
 # oxitraffic_container_labels_traefik_enabled controls whether labels to assist a Traefik reverse-proxy will be attached to the container.
-# See `roles/custom/oxitraffic_oxitraffic/templates/labels.j2` for details.
+# See `../templates/labels.j2` for details.
 #
 # To inject your own other container labels, see `oxitraffic_container_labels_additional_labels`.
 oxitraffic_container_labels_traefik_enabled: false
