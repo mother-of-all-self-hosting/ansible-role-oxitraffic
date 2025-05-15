@@ -8,39 +8,34 @@
 
 - name: Ensure OxiTraffic path exists
   ansible.builtin.file:
-    path: "{{ item.path }}"
+    path: "{{ item }}"
     state: directory
     mode: 0700
     owner: "{{ oxitraffic_uid }}"
     group: "{{ oxitraffic_gid }}"
   with_items:
-    - {path: "{{ oxitraffic_base_path }}", when: true}
+    - "{{ oxitraffic_base_path }}"
 
 - name: Ensure OxiTraffic data path exists
   ansible.builtin.file:
-    path: "{{ item.path }}"
+    path: "{{ item }}"
     state: directory
     mode: 0755
     owner: "{{ oxitraffic_uid }}"
     group: "{{ oxitraffic_gid }}"
   with_items:
-    - {path: "{{ oxitraffic_log_path }}", when: true}
+    - "{{ oxitraffic_log_path }}"
 
-- name: Ensure OxiTraffic traefik labels are installed
+- name: Ensure OxiTraffic support files installed
   ansible.builtin.template:
-    src: "{{ role_path }}/templates/labels.j2"
-    dest: "{{ oxitraffic_base_path }}/labels"
+    src: "{{ role_path }}/templates/{{ item }}.j2"
+    dest: "{{ oxitraffic_base_path }}/{{ item }}"
+    mode: 0640
     owner: "{{ oxitraffic_uid }}"
     group: "{{ oxitraffic_gid }}"
-    mode: 0640
-
-- name: Ensure OxiTraffic configuration is deployed
-  ansible.builtin.template:
-    src: "{{ role_path }}/templates/config.toml.j2"
-    dest: "{{ oxitraffic_config_path }}"
-    owner: "{{ oxitraffic_uid }}"
-    group: "{{ oxitraffic_gid }}"
-    mode: 0640
+  with_items:
+    - config.toml
+    - labels
 
 - name: Ensure OxiTraffic container image is pulled
   community.docker.docker_image:
