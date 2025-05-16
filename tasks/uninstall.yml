@@ -1,4 +1,5 @@
 # SPDX-FileCopyrightText: 2023 Julian-Samuel Gebühr
+# SPDX-FileCopyrightText: 2024 Slavi Pantaleev
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -11,17 +12,19 @@
 
 - when: oxitraffic_service_stat.stat.exists | bool
   block:
-    - name: Ensure OxiTraffic service is stopped
+    - name: Ensure OxiTraffic systemd service is stopped
       ansible.builtin.service:
         name: "{{ oxitraffic_identifier }}"
         state: stopped
+        enabled: false
         daemon_reload: true
-    - name: Ensure OxiTraffic service doesn't exist
+
+    - name: Ensure OxiTraffic systemd service does not exist
       ansible.builtin.file:
-        dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ oxitraffic_identifier }}.service"
+        path: "{{ devture_systemd_docker_base_systemd_path }}/{{ oxitraffic_identifier }}.service"
         state: absent
 
-    - name: Ensure OxiTraffic base path is files deleted (make sure to delete node data)
+    - name: Ensure OxiTraffic path does not exist
       ansible.builtin.file:
         path: "{{ oxitraffic_base_path }}"
         state: absent
