@@ -150,7 +150,7 @@ oxitraffic_systemd_wanted_services_list: []
 #   another.label="here"
 oxitraffic_container_labels_additional_labels: ''
 
-# Example: "https://oxitraffic.example.org"
+# Example: "https://oxitraffic.example.com"
 oxitraffic_tracked_origin: ''
 
 # In case both OxiTraffic and your website are in a local network and `website` can be resolved to the local IP address of the your website.
