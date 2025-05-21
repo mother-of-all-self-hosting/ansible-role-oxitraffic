@@ -1,4 +1,5 @@
 # SPDX-FileCopyrightText: 2023 Julian-Samuel Gebühr
+# SPDX-FileCopyrightText: 2023 Slavi Pantaleev
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -7,15 +8,12 @@
 - block:
     - when: oxitraffic_enabled | bool
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/validate_config.yml"
-  tags:
-    - setup-all
-    - setup-oxitraffic
-    - install-all
-    - install-oxitraffic
 
-- block:
     - when: oxitraffic_enabled | bool
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/install.yml"
+
+    - when: oxitraffic_enabled | bool
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/migrate_0.7_to_0.8.yml"
   tags:
     - setup-all
     - setup-oxitraffic
@@ -28,12 +26,3 @@
   tags:
     - setup-all
     - setup-oxitraffic
-
-- block:
-    - when: oxitraffic_enabled | bool
-      ansible.builtin.include_tasks: "{{ role_path }}/tasks/migrate_0.7_to_0.8.yml"
-  tags:
-    - setup-all
-    - setup-oxitraffic
-    - install-all
-    - install-oxitraffic
