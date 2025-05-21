@@ -5,14 +5,18 @@
 
 ---
 
-- block:
-    - when: oxitraffic_enabled | bool
+- name: Perform OxiTraffic installation tasks
+  block:
+    - name: Validate OxiTraffic configuration
+      when: oxitraffic_enabled | bool
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/validate_config.yml"
 
-    - when: oxitraffic_enabled | bool
+    - name: Install OxiTraffic
+      when: oxitraffic_enabled | bool
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/install.yml"
 
-    - when: oxitraffic_enabled | bool
+    - name: Migrate OxiTraffic 0.7 to 0.8
+      when: oxitraffic_enabled | bool
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/migrate_0.7_to_0.8.yml"
   tags:
     - setup-all
@@ -20,8 +24,10 @@
     - install-all
     - install-oxitraffic
 
-- block:
-    - when: not oxitraffic_enabled | bool
+- name: Perform OxiTraffic uninstallation tasks
+  block:
+    - name: Uninstall OxiTraffic
+      when: not oxitraffic_enabled | bool
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/uninstall.yml"
   tags:
     - setup-all
