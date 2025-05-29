@@ -3,17 +3,17 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 ---
-
 - name: Check if legacy OxiTraffic data directory exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ oxitraffic_legacy_data_path }}"
   register: oxitraffic_legacy_data_dir_reg
 
-- name: Copy OxiTraffic logs to new directory 
+- name: Copy OxiTraffic logs to new directory
   ansible.builtin.copy:
     src: "{{ oxitraffic_legacy_data_path }}/oxitraffic.log"
     remote_src: true
     dest: "{{ oxitraffic_log_path }}/oxitraffic.log.legacy"
+    mode: "0755"
   when: oxitraffic_legacy_data_dir_reg.stat.exists
 
 - name: Remove OxiTraffic legacy data dir
