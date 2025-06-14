@@ -66,21 +66,21 @@
   block:
     - name: Ensure OxiTraffic repository is present on self-build
       ansible.builtin.git:
-        repo: "{{ oxitraffic_container_repo }}"
-        version: "{{ oxitraffic_container_repo_version }}"
-        dest: "{{ oxitraffic_container_src_files_path }}"
+        repo: "{{ oxitraffic_container_image_self_build_repo }}"
+        version: "{{ oxitraffic_container_image_self_build_repo_version }}"
+        dest: "{{ oxitraffic_container_image_self_build_src_files_path }}"
         force: "yes"
       register: oxitraffic_git_pull_results
 
     - name: Ensure OxiTraffic container image is built
       community.docker.docker_image:
-        name: "{{ oxitraffic_container_image_name }}"
+        name: "{{ oxitraffic_container_image_self_build_name }}"
         source: build
         force_source: "{{ oxitraffic_git_pull_results.changed if ansible_version.major > 2 or ansible_version.minor >= 8 else omit }}"
         force: "{{ omit if ansible_version.major > 2 or ansible_version.minor >= 8 else oxitraffic_git_pull_results.changed }}"
         build:
           dockerfile: Containerfile
-          path: "{{ oxitraffic_container_src_files_path }}"
+          path: "{{ oxitraffic_container_image_self_build_src_files_path }}"
           pull: true
           args:
 

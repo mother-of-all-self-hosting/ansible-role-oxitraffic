@@ -37,10 +37,10 @@ oxitraffic_container_image_registry_prefix_upstream_default: docker.io/
 oxitraffic_container_image_force_pull: "{{ oxitraffic_container_image.endswith(':latest') }}"
 
 oxitraffic_container_image_self_build: false
-oxitraffic_container_image_name: "mo8it/oxitraffic:{{ oxitraffic_container_repo_version }}"
-oxitraffic_container_repo: "https://codeberg.org/mo8it/oxitraffic.git"
-oxitraffic_container_repo_version: "{{ oxitraffic_version if oxitraffic_version != 'latest' else 'main' }}"
-oxitraffic_container_src_files_path: "{{ oxitraffic_base_path }}/docker-src"
+oxitraffic_container_image_self_build_name: "mo8it/oxitraffic:{{ oxitraffic_container_image_self_build_repo_version }}"
+oxitraffic_container_image_self_build_repo: "https://codeberg.org/mo8it/oxitraffic.git"
+oxitraffic_container_image_self_build_repo_version: "{{ oxitraffic_version if oxitraffic_version != 'latest' else 'main' }}"
+oxitraffic_container_image_self_build_src_files_path: "{{ oxitraffic_base_path }}/docker-src"
 
 # Controls whether the OxiTraffic container exposes its HTTP port (as defined by `oxitraffic_container_http_port`).
 #
