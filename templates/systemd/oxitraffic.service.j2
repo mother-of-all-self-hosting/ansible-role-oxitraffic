@@ -37,7 +37,7 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
       --label-file={{ oxitraffic_base_path }}/labels \
       --mount type=bind,src={{ oxitraffic_log_path }},dst=/var/log/oxitraffic \
       --mount type=bind,src={{ oxitraffic_config_path }},dst=/volumes/config.toml,readonly \
-      {{ oxitraffic_container_image }}
+      {{ oxitraffic_container_image_self_build_name if oxitraffic_container_image_self_build else oxitraffic_container_image }}
 
 {% for network in oxitraffic_container_additional_networks %}
 ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} network connect {{ network }} {{ oxitraffic_identifier }}
