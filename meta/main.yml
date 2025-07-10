@@ -1,8 +1,9 @@
 ---
 galaxy_info:
-  role_name: oxitraffic
   author: Julian-Samuel Gebühr
   company: Hyteck
+  role_name: oxitraffic
+  namespace: mash
   description: Ansible role to install OxiTraffic a self-hosted, simple and privacy respecting website traffic tracker.
   platforms:
     - name: Debian
