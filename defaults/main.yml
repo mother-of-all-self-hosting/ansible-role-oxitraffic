@@ -67,7 +67,7 @@ oxitraffic_container_additional_networks_custom: []
 oxitraffic_container_labels_traefik_enabled: true
 oxitraffic_container_labels_traefik_docker_network: "{{ oxitraffic_container_network }}"
 oxitraffic_container_labels_traefik_hostname: "{{ oxitraffic_hostname }}"
-# The path prefix must either be `/` or not end with a slash (e.g. `/adguard-home`).
+# The path prefix must either be `/` or not end with a slash (e.g. `/oxitraffic`).
 oxitraffic_container_labels_traefik_path_prefix: "{{ oxitraffic_path_prefix }}"
 oxitraffic_container_labels_traefik_rule: "Host(`{{ oxitraffic_container_labels_traefik_hostname }}`){% if oxitraffic_container_labels_traefik_path_prefix != '/' %} && PathPrefix(`{{ oxitraffic_container_labels_traefik_path_prefix }}`){% endif %}"
 oxitraffic_container_labels_traefik_priority: 0
