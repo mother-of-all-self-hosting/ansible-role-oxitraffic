@@ -72,7 +72,7 @@ oxitraffic_container_labels_traefik_tls: "{{ oxitraffic_container_labels_traefik
 oxitraffic_container_labels_traefik_tls_certResolver: default  # noqa var-naming
 
 # Controls which additional headers to attach to all HTTP requests.
-# To add your own custom request headers, use `oxitraffic_container_labels_traefik_additional_response_headers_custom`
+# To add your own custom request headers, use `oxitraffic_container_labels_traefik_additional_request_headers_custom`
 oxitraffic_container_labels_traefik_additional_request_headers: "{{ oxitraffic_container_labels_traefik_additional_request_headers_auto | combine(oxitraffic_container_labels_traefik_additional_request_headers_custom) }}"
 oxitraffic_container_labels_traefik_additional_request_headers_auto: {}
 oxitraffic_container_labels_traefik_additional_request_headers_custom: {}
