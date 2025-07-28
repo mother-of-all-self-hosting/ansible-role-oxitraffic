@@ -64,10 +64,14 @@ oxitraffic_container_additional_networks_custom: []
 # See `../templates/labels.j2` for details.
 #
 # To inject your own other container labels, see `oxitraffic_container_labels_additional_labels`.
-oxitraffic_container_labels_traefik_enabled: false
-oxitraffic_container_labels_traefik_docker_network: ""
-oxitraffic_container_labels_traefik_entrypoints: web-secure
+oxitraffic_container_labels_traefik_enabled: true
+oxitraffic_container_labels_traefik_docker_network: "{{ oxitraffic_container_network }}"
+oxitraffic_container_labels_traefik_hostname: "{{ oxitraffic_hostname }}"
+# The path prefix must either be `/` or not end with a slash (e.g. `/adguard-home`).
+oxitraffic_container_labels_traefik_path_prefix: "{{ oxitraffic_path_prefix }}"
+oxitraffic_container_labels_traefik_rule: "Host(`{{ oxitraffic_container_labels_traefik_hostname }}`){% if oxitraffic_container_labels_traefik_path_prefix != '/' %} && PathPrefix(`{{ oxitraffic_container_labels_traefik_path_prefix }}`){% endif %}"
 oxitraffic_container_labels_traefik_priority: 0
+oxitraffic_container_labels_traefik_entrypoints: web-secure
 oxitraffic_container_labels_traefik_tls: "{{ oxitraffic_container_labels_traefik_entrypoints != 'web' }}"
 oxitraffic_container_labels_traefik_tls_certResolver: default  # noqa var-naming
 

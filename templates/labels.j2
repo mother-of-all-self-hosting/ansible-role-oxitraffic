@@ -1,15 +1,29 @@
 {#
 SPDX-FileCopyrightText: 2023 Julian-Samuel Gebühr
+SPDX-FileCopyrightText: 2023 Slavi Pantaleev
 
 SPDX-License-Identifier: AGPL-3.0-or-later
 #}
 
 {% if oxitraffic_container_labels_traefik_enabled %}
+traefik.enable=true
+
 {% if oxitraffic_container_labels_traefik_docker_network %}
 traefik.docker.network={{ oxitraffic_container_labels_traefik_docker_network }}
 {% endif %}
 
 {% set middlewares = [] %}
+
+{% if oxitraffic_container_labels_traefik_path_prefix != '/' %}
+traefik.http.middlewares.{{ oxitraffic_identifier }}-slashless-redirect.redirectregex.regex=^({{ oxitraffic_container_labels_traefik_path_prefix | quote }})$
+traefik.http.middlewares.{{ oxitraffic_identifier }}-slashless-redirect.redirectregex.replacement=${1}/
+{% set middlewares = middlewares + [oxitraffic_identifier + '-slashless-redirect'] %}
+{% endif %}
+
+{% if oxitraffic_container_labels_traefik_path_prefix != '/' %}
+traefik.http.middlewares.{{ oxitraffic_identifier }}-strip-prefix.stripprefix.prefixes={{ oxitraffic_container_labels_traefik_path_prefix }}
+{% set middlewares = middlewares + [oxitraffic_identifier + '-strip-prefix'] %}
+{% endif %}
 
 {% if oxitraffic_container_labels_traefik_additional_request_headers.keys() | length > 0 %}
 {% for name, value in oxitraffic_container_labels_traefik_additional_request_headers.items() %}
@@ -25,21 +39,21 @@ traefik.http.middlewares.{{ oxitraffic_identifier }}-add-response-headers.header
 {% set middlewares = middlewares + [oxitraffic_identifier + '-add-response-headers'] %}
 {% endif %}
 
-traefik.enable=true
-{% endif %}
-traefik.http.routers.{{ oxitraffic_identifier }}.rule=Host("{{ oxitraffic_hostname }}")
+traefik.http.routers.{{ oxitraffic_identifier }}.rule={{ oxitraffic_container_labels_traefik_rule }}
 {% if oxitraffic_container_labels_traefik_priority | int > 0 %}
 traefik.http.routers.{{ oxitraffic_identifier }}.priority={{ oxitraffic_container_labels_traefik_priority }}
 {% endif %}
+traefik.http.routers.{{ oxitraffic_identifier }}.service={{ oxitraffic_identifier }}
 {% if middlewares | length > 0 %}
 traefik.http.routers.{{ oxitraffic_identifier }}.middlewares={{ middlewares | join(',') }}
 {% endif %}
-traefik.http.routers.{{ oxitraffic_identifier }}.service={{ oxitraffic_identifier }}
 traefik.http.routers.{{ oxitraffic_identifier }}.entrypoints={{ oxitraffic_container_labels_traefik_entrypoints }}
 traefik.http.routers.{{ oxitraffic_identifier }}.tls={{ oxitraffic_container_labels_traefik_tls | to_json }}
 {% if oxitraffic_container_labels_traefik_tls %}
 traefik.http.routers.{{ oxitraffic_identifier }}.tls.certResolver={{ oxitraffic_container_labels_traefik_tls_certResolver }}
 {% endif %}
+
 traefik.http.services.{{ oxitraffic_identifier }}.loadbalancer.server.port={{ oxitraffic_container_http_port }}
+{% endif %}
 
 {{ oxitraffic_container_labels_additional_labels }}
