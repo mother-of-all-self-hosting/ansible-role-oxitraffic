@@ -29,6 +29,8 @@ oxitraffic_hostname: ''
 
 oxitraffic_scheme: https
 
+oxitraffic_path_prefix: /
+
 oxitraffic_container_image: "{{ oxitraffic_container_image_registry_prefix }}mo8it/oxitraffic:{{ oxitraffic_container_image_tag }}"
 oxitraffic_container_image_tag: "{{ oxitraffic_version }}"
 oxitraffic_container_image_registry_prefix: "{{ oxitraffic_container_image_registry_prefix_upstream }}"
