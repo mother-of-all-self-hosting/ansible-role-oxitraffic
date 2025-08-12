@@ -18,11 +18,17 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 # Setting up OxiTraffic
 
-This is an [Ansible](https://www.ansible.com/) role which installs [OxiTraffic](https://github.com/httpjamesm/OxiTraffic) to run as a [Docker](https://www.docker.com/) container wrapped in a systemd service.
+This is an [Ansible](https://www.ansible.com/) role which installs [OxiTraffic](https://codeberg.org/mo8it/oxitraffic) to run as a [Docker](https://www.docker.com/) container wrapped in a systemd service.
 
-OxiTraffic allows you to view StackOverflow threads without exposing your IP address, browsing habits, and other browser fingerprinting data to the website.
+OxiTraffic is a self-hosted, simple and privacy respecting website traffic tracker. It does not collect IP addresses or browser information. Each visitor is assigned an anonymous ID upon visiting the website, which is used to store information on how long the visitor stays there, without setting cookies.
 
-See the project's [documentation](https://github.com/httpjamesm/OxiTraffic/blob/main/README.md) to learn what OxiTraffic does and why it might be useful to you.
+See the project's [documentation](https://codeberg.org/mo8it/oxitraffic/src/branch/main/README.md) to learn what OxiTraffic does and why it might be useful to you.
+
+## Prerequisites
+
+To run a OxiTraffic instance it is necessary to prepare a [Postgres](https://www.postgresql.org) database server.
+
+If you are looking for an Ansible role for it, you can check out [this role (ansible-role-postgres)](https://github.com/mother-of-all-self-hosting/ansible-role-postgres) maintained by the [Mother-of-All-Self-Hosting (MASH)](https://github.com/mother-of-all-self-hosting) team.
 
 ## Adjusting the playbook configuration
 
@@ -58,6 +64,30 @@ After adjusting the hostname, make sure to adjust your DNS records to point the 
 
 **Note**: hosting OxiTraffic under a subpath (by configuring the `oxitraffic_path_prefix` variable) does not seem to be possible due to OxiTraffic's technical limitations.
 
+### Set variables for connecting to a Postgres database server
+
+To have the Miniflux instance connect to your Postgres server, add the following configuration to your `vars.yml` file.
+
+```yaml
+oxitraffic_database_username: YOUR_POSTGRES_SERVER_USERNAME_HERE
+oxitraffic_database_password: YOUR_POSTGRES_SERVER_PASSWORD_HERE
+oxitraffic_database_hostname: YOUR_POSTGRES_SERVER_HOSTNAME_HERE
+oxitraffic_database_port: 5432
+oxitraffic_database_name: YOUR_POSTGRES_SERVER_DATABASE_NAME_HERE
+```
+
+Make sure to replace values for variables with yours.
+
+### Set the website hostname
+
+You also need to set the hostname of the website, on which the OxiTraffic instance counts visits, as below:
+
+```yaml
+oxitraffic_tracked_origin: https://origin.example.com
+```
+
+Replace `https://origin.example.com` with the hostname of your website.
+
 ### Extending the configuration
 
 There are some additional things you may wish to configure about the component.
@@ -66,7 +96,7 @@ Take a look at:
 
 - [`defaults/main.yml`](../defaults/main.yml) for some variables that you can customize via your `vars.yml` file. You can override settings (even those that don't have dedicated playbook variables) using the `oxitraffic_environment_variables_additional_variables` variable
 
-See its [`docker-compose.example.yml`](https://github.com/httpjamesm/OxiTraffic/blob/main/docker-compose.example.yml) for a complete list of OxiTraffic's config options that you could put in `oxitraffic_environment_variables_additional_variables`.
+See the [documentation](https://codeberg.org/mo8it/oxitraffic#configuration) for a complete list of OxiTraffic's config options that you could put in `oxitraffic_environment_variables_additional_variables`.
 
 ## Installing
 
@@ -80,14 +110,16 @@ If you use the MASH playbook, the shortcut commands with the [`just` program](ht
 
 ## Usage
 
-After running the command for installation, OxiTraffic becomes available at the specified hostname like `https://example.com`.
+After running the command for installation, the OxiTraffic instance becomes available at the URL specified with `oxitraffic_hostname`. With the configuration above, the service is hosted at `https://example.com`.
 
-[Libredirect](https://libredirect.github.io/), an extension for Firefox and Chromium-based desktop browsers, has support for redirections to OxiTraffic. See [this section](https://github.com/httpjamesm/OxiTraffic/blob/main/README.md#how-to-make-stack-overflow-links-take-you-to-oxitraffic-automatically) on the official documentation for more information.
+To have your OxiTraffic instance count visits at `https://origin.example.com`, you need to add the following script tag to the website:
 
-If you would like to make your instance public so that it can be used by anyone including Libredirect, please consider to send a PR to the [upstream project](https://github.com/httpjamesm/OxiTraffic) to add yours to [`instances.json`](https://github.com/httpjamesm/OxiTraffic/blob/main/instances.json), which Libredirect automatically fetches using a script (see [this FAQ entry](https://libredirect.github.io/faq.html#where_the_hell_are_those_instances_coming_from)).
+```html
+<script type="module" src="https://example.com/count.js"></script>
+```
 
 ## Troubleshooting
 
 ### Check the service's logs
 
-You can find the logs in [systemd-journald](https://www.freedesktop.org/software/systemd/man/systemd-journald.service.html) by logging in to the server with SSH and running `journalctl -fu oxitraffic` (or how you/your playbook named the service, e.g. `mash-oxitraffic`).
+Internal OxiTraffic errors will not be logged to `stdout` and will therefore not be part of `journalctl -fu mash-oxitraffic`. Its log can be checked by running `tail -f logs/oxitraffic`.

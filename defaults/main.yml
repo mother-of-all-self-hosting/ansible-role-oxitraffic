@@ -172,11 +172,11 @@ oxitraffic_tracked_origin_callback: "{{ oxitraffic_tracked_origin }}"
 oxitraffic_utc_offset_hours: "0"
 oxitraffic_utc_offset_minutes: "0"
 
+oxitraffic_database_username: oxitraffic
+oxitraffic_database_password: ''
 oxitraffic_database_hostname: ''
 oxitraffic_database_port: 5432
 oxitraffic_database_name: oxitraffic
-oxitraffic_database_username: oxitraffic
-oxitraffic_database_password: ''
 # Use this to set the sslmode parameter of the SSL connection
 # By default, we expect a local container (without SSL), so attempting SSL connections is not necessary.
 oxitraffic_database_sslmode: disable
