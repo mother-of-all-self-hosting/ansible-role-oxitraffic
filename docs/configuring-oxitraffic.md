@@ -66,7 +66,7 @@ After adjusting the hostname, make sure to adjust your DNS records to point the 
 
 ### Set variables for connecting to a Postgres database server
 
-To have the Miniflux instance connect to your Postgres server, add the following configuration to your `vars.yml` file.
+To have the OxiTraffic instance connect to your Postgres server, add the following configuration to your `vars.yml` file.
 
 ```yaml
 oxitraffic_database_username: YOUR_POSTGRES_SERVER_USERNAME_HERE
