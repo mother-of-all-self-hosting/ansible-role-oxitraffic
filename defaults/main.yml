@@ -21,11 +21,11 @@ oxitraffic_legacy_data_path: "{{ oxitraffic_base_path }}/data"
 # renovate: datasource=docker depName=mo8it/oxitraffic versioning=semver
 oxitraffic_version: v0.10.4
 
-oxitraffic_uid: ''
-oxitraffic_gid: ''
+oxitraffic_uid: ""
+oxitraffic_gid: ""
 
 # The hostname at which OxiTraffic is served.
-oxitraffic_hostname: ''
+oxitraffic_hostname: ""
 
 oxitraffic_scheme: https
 
@@ -163,10 +163,10 @@ oxitraffic_systemd_wanted_services_list_custom: []
 # oxitraffic_container_labels_additional_labels: |
 #   my.label=1
 #   another.label="here"
-oxitraffic_container_labels_additional_labels: ''
+oxitraffic_container_labels_additional_labels: ""
 
 # Example: "https://oxitraffic.example.com"
-oxitraffic_tracked_origin: ''
+oxitraffic_tracked_origin: ""
 
 # In case both OxiTraffic and your website are in a local network and `website` can be resolved to the local IP address of the your website.
 # Defaults to the value of `oxitraffic_tracked_origin`.
@@ -176,8 +176,8 @@ oxitraffic_utc_offset_hours: "0"
 oxitraffic_utc_offset_minutes: "0"
 
 oxitraffic_database_username: oxitraffic
-oxitraffic_database_password: ''
-oxitraffic_database_hostname: ''
+oxitraffic_database_password: ""
+oxitraffic_database_hostname: ""
 oxitraffic_database_port: 5432
 oxitraffic_database_name: oxitraffic
 # Use this to set the sslmode parameter of the SSL connection
