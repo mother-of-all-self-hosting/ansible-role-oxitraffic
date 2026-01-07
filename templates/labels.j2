@@ -56,4 +56,6 @@ traefik.http.routers.{{ oxitraffic_identifier }}.tls.certResolver={{ oxitraffic_
 traefik.http.services.{{ oxitraffic_identifier }}.loadbalancer.server.port={{ oxitraffic_container_http_port }}
 {% endif %}
 
-{{ oxitraffic_container_labels_additional_labels }}
+{% for arg in oxitraffic_container_labels_additional_labels %}
+{{ arg }}
+{% endfor %}

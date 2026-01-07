@@ -103,11 +103,11 @@ oxitraffic_container_labels_traefik_additional_response_headers_custom: {}
 #
 # Example:
 # oxitraffic_container_labels_additional_labels_custom: |
-#   my.label=1
-#   another.label="here"
-oxitraffic_container_labels_additional_labels: "{{ oxitraffic_container_labels_additional_labels_auto | combine(oxitraffic_container_labels_additional_labels_custom) }}"
-oxitraffic_container_labels_additional_labels_auto: {}
-oxitraffic_container_labels_additional_labels_custom: {}
+#   - my.label=1
+#   - another.label="here"
+oxitraffic_container_labels_additional_labels: "{{ oxitraffic_container_labels_additional_labels_auto + oxitraffic_container_labels_additional_labels_custom }}"
+oxitraffic_container_labels_additional_labels_auto: []
+oxitraffic_container_labels_additional_labels_custom: []
 
 # A list of extra arguments to pass to the container (`docker create` command)
 oxitraffic_container_extra_arguments: "{{ oxitraffic_container_extra_arguments_auto + oxitraffic_container_extra_arguments_custom }}"
