@@ -2,7 +2,7 @@
 SPDX-FileCopyrightText: 2023 Julian-Samuel Gebühr
 SPDX-FileCopyrightText: 2023 Slavi Pantaleev
 SPDX-FileCopyrightText: 2024 Nikita Chernyi
-SPDX-FileCopyrightText: 2025 Suguru Hirahara
+SPDX-FileCopyrightText: 2025, 2026 Suguru Hirahara
 
 SPDX-License-Identifier: AGPL-3.0-or-later
 #}
@@ -34,6 +34,7 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
       {% if oxitraffic_container_http_host_bind_port %}
       -p {{ oxitraffic_container_http_host_bind_port }}:{{ oxitraffic_container_http_port }} \
       {% endif %}
+      --env-file={{ oxitraffic_base_path }}/env \
       --label-file={{ oxitraffic_base_path }}/labels \
       --mount type=bind,src={{ oxitraffic_log_path }},dst=/var/log/oxitraffic \
       --mount type=bind,src={{ oxitraffic_config_path }},dst=/volumes/config.toml,readonly \
