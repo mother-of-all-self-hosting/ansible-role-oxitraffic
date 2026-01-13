@@ -5,24 +5,15 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 ---
-- name: Ensure OxiTraffic path exists
+- name: Ensure OxiTraffic paths exist
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    mode: "0700"
+    mode: "0750"
     owner: "{{ oxitraffic_uid }}"
     group: "{{ oxitraffic_gid }}"
   with_items:
     - "{{ oxitraffic_base_path }}"
-
-- name: Ensure OxiTraffic data path exists
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: directory
-    mode: "0755"
-    owner: "{{ oxitraffic_uid }}"
-    group: "{{ oxitraffic_gid }}"
-  with_items:
     - "{{ oxitraffic_log_path }}"
 
 - name: Ensure OxiTraffic support files installed
