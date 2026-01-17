@@ -47,13 +47,13 @@ oxitraffic_container_image_self_build_repo: "https://codeberg.org/mo8it/oxitraff
 oxitraffic_container_image_self_build_repo_version: "{{ oxitraffic_version if oxitraffic_version != 'latest' else 'main' }}"
 oxitraffic_container_image_self_build_src_files_path: "{{ oxitraffic_base_path }}/docker-src"
 
+# The base container network. It will be auto-created by this role if it doesn't exist already.
+oxitraffic_container_network: "{{ oxitraffic_identifier }}"
+
 # Controls whether the container exposes its HTTP port (tcp/8080 in the container).
 #
 # Takes an "<ip>:<port>" or "<port>" value (e.g. "127.0.0.1:2586"), or empty string to not expose.
 oxitraffic_container_http_host_bind_port: ""
-
-# The base container network. It will be auto-created by this role if it doesn't exist already.
-oxitraffic_container_network: "{{ oxitraffic_identifier }}"
 
 # The port number in the container
 oxitraffic_container_http_port: 8080
