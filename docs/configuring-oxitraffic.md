@@ -26,7 +26,7 @@ See the project's [documentation](https://codeberg.org/mo8it/oxitraffic/src/bran
 
 ## Prerequisites
 
-To run a OxiTraffic instance it is necessary to prepare a [Postgres](https://www.postgresql.org) database server.
+To run an OxiTraffic instance it is necessary to prepare a [Postgres](https://www.postgresql.org) database server.
 
 If you are looking for an Ansible role for Postgres, you can check out [this role (ansible-role-postgres)](https://github.com/mother-of-all-self-hosting/ansible-role-postgres) maintained by the [Mother-of-All-Self-Hosting (MASH)](https://github.com/mother-of-all-self-hosting) team.
 
@@ -90,7 +90,7 @@ Replace `https://origin.example.com` with the hostname of your website.
 
 ### Extending the configuration
 
-There are some additional things you may wish to configure about the component.
+There are some additional things you may wish to configure about the service.
 
 Take a look at:
 
