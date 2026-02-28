@@ -27,6 +27,7 @@
     - config.toml
     - env
     - labels
+  register: oxitraffic_support_files_result
 
 - name: Run if self-building of OxiTraffic container image is not enabled
   when: "not oxitraffic_container_image_self_build | bool"
@@ -38,20 +39,20 @@
         source: "{{ 'pull' if ansible_version.major > 2 or ansible_version.minor > 7 else omit }}"
         force_source: "{{ oxitraffic_container_image_force_pull if ansible_version.major > 2 or ansible_version.minor >= 8 else omit }}"
         force: "{{ omit if ansible_version.major > 2 or ansible_version.minor >= 8 else oxitraffic_container_image_force_pull }}"
-      register: result
+      register: oxitraffic_container_image_pull_result
       retries: "{{ devture_playbook_help_container_retries_count }}"
       delay: "{{ devture_playbook_help_container_retries_delay }}"
-      until: result is not failed
+      until: oxitraffic_container_image_pull_result is not failed
 
     - name: Ensure OxiTraffic container image is pulled via ansible.builtin.command
       when: devture_systemd_docker_base_container_image_pull_method == 'command'
       ansible.builtin.command:
         cmd: "{{ devture_systemd_docker_base_host_command_docker }} pull {{ oxitraffic_container_image }}"
-      register: result
+      register: oxitraffic_container_image_pull_result
       retries: "{{ devture_playbook_help_container_retries_count }}"
       delay: "{{ devture_playbook_help_container_retries_delay }}"
-      until: result is not failed
-      changed_when: "'Downloaded newer image' in result.stdout"
+      until: oxitraffic_container_image_pull_result is not failed
+      changed_when: "'Downloaded newer image' in oxitraffic_container_image_pull_result.stdout"
 
 - name: Run if self-building of OxiTraffic container image is enabled
   when: "oxitraffic_container_image_self_build | bool"
@@ -98,8 +99,19 @@
   changed_when: oxitraffic_network_creation_result.rc == 0
   failed_when: oxitraffic_network_creation_result.rc != 0 and 'already exists' not in oxitraffic_network_creation_result.stderr
 
-- name: Ensure oxitraffic.service is present
+- name: Ensure OxiTraffic systemd service is present
   ansible.builtin.template:
     src: "{{ role_path }}/templates/systemd/oxitraffic.service.j2"
     dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ oxitraffic_identifier }}.service"
     mode: "0644"
+  register: oxitraffic_systemd_service_result
+
+- name: Determine whether OxiTraffic needs a restart
+  ansible.builtin.set_fact:
+    oxitraffic_restart_necessary: >-
+      {{
+        oxitraffic_support_files_result.changed | default(false)
+        or oxitraffic_systemd_service_result.changed | default(false)
+        or oxitraffic_container_image_pull_result.changed | default(false)
+        or oxitraffic_container_image_build_result.changed | default(false)
+      }}
