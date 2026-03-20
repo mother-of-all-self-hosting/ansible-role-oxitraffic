@@ -220,14 +220,16 @@ oxitraffic_tracked_origin_callback: "{{ oxitraffic_tracked_origin }}"
 oxitraffic_utc_offset_hours: "0"
 oxitraffic_utc_offset_minutes: "0"
 
-oxitraffic_database_username: oxitraffic
-oxitraffic_database_password: ""
+# Specify database configuration
 oxitraffic_database_hostname: ""
 oxitraffic_database_port: 5432
-oxitraffic_database_name: oxitraffic
-# Use this to set the sslmode parameter of the SSL connection
+oxitraffic_database_username: oxitraffic
+oxitraffic_database_password: ""
+# Specify SSL mode for Postgres database server
 # By default, we expect a local container (without SSL), so attempting SSL connections is not necessary.
+# Valid values: see https://www.postgresql.org/docs/11/libpq-ssl.html#LIBPQ-SSL-SSLMODE-STATEMENTS
 oxitraffic_database_sslmode: disable
+oxitraffic_database_name: oxitraffic
 
 # Specify the timezone
 oxitraffic_environment_variables_tz: UTC
