@@ -1,4 +1,7 @@
 # SPDX-FileCopyrightText: 2023 Julian-Samuel Gebühr
+# SPDX-FileCopyrightText: 2023 MASH project contributors
+# SPDX-FileCopyrightText: 2023-2025 Slavi Pantaleev
+# SPDX-FileCopyrightText: 2025, 2026 Suguru Hirahara
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -16,14 +19,17 @@
   ansible.builtin.fail:
     msg: >-
       You need to define a required configuration setting (`{{ item }}`).
-  when: "lookup('vars', item, default='') | string | length == 0"
+  when: "item.when | bool and lookup('vars', item.name, default='') | string | length == 0"
   with_items:
-    - oxitraffic_uid
-    - oxitraffic_gid
-    - oxitraffic_hostname
-    - oxitraffic_path_prefix
-    - oxitraffic_container_network
-    - oxitraffic_tracked_origin
+    - { "name": "oxitraffic_uid", when: true }
+    - { "name": "oxitraffic_gid", when: true }
+    - { "name": "oxitraffic_hostname", when: true }
+    - { "name": "oxitraffic_path_prefix", when: true }
+    - { "name": "oxitraffic_container_network", when: true }
+    - { "name": "oxitraffic_database_socket_path_host", when: "{{ oxitraffic_database_socket_enabled }}" }
+    - { "name": "oxitraffic_database_hostname", when: "{{ not oxitraffic_database_socket_enabled }}" }
+    - { "name": "oxitraffic_database_password", when: true }
+    - { "name": "oxitraffic_tracked_origin", when: true }
 
 - name: Run if Traefik is enabled
   when: oxitraffic_container_labels_traefik_enabled | bool

@@ -220,6 +220,12 @@ oxitraffic_tracked_origin_callback: "{{ oxitraffic_tracked_origin }}"
 oxitraffic_utc_offset_hours: "0"
 oxitraffic_utc_offset_minutes: "0"
 
+########################################################################
+#                                                                      #
+# database                                                             #
+#                                                                      #
+########################################################################
+
 # Specify database configuration
 oxitraffic_database_hostname: ""
 oxitraffic_database_port: 5432
@@ -230,6 +236,21 @@ oxitraffic_database_password: ""
 # Valid values: see https://www.postgresql.org/docs/11/libpq-ssl.html#LIBPQ-SSL-SSLMODE-STATEMENTS
 oxitraffic_database_sslmode: disable
 oxitraffic_database_name: oxitraffic
+
+# Control if the connection to Postgres is made via a Unix socket
+oxitraffic_database_socket_enabled: true
+
+# Specify the path to the Postgres Unix socket path on the host (bind-mount source)
+oxitraffic_database_socket_path_host: ""
+
+# Specify the path to the Postgres Unix socket path inside the OxiTraffic server container
+oxitraffic_database_socket_path_container: /run-postgres
+
+########################################################################
+#                                                                      #
+# /database                                                            #
+#                                                                      #
+########################################################################
 
 # Specify the timezone
 oxitraffic_environment_variables_tz: UTC
