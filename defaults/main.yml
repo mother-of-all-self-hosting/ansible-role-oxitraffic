@@ -243,7 +243,7 @@ oxitraffic_database_socket_enabled: true
 # Specify the path to the Postgres Unix socket path on the host (bind-mount source)
 oxitraffic_database_socket_path_host: ""
 
-# Specify the path to the Postgres Unix socket path inside the OxiTraffic server container
+# Specify the path to the Postgres Unix socket path inside the OxiTraffic container
 oxitraffic_database_socket_path_container: /run-postgres
 
 ########################################################################
