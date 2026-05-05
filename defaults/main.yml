@@ -39,7 +39,6 @@ oxitraffic_container_image_tag: "{{ oxitraffic_version }}"
 oxitraffic_container_image_registry_prefix: "{{ oxitraffic_container_image_registry_prefix_upstream }}"
 oxitraffic_container_image_registry_prefix_upstream: "{{ oxitraffic_container_image_registry_prefix_upstream_default }}"
 oxitraffic_container_image_registry_prefix_upstream_default: docker.io/
-oxitraffic_container_image_force_pull: "{{ oxitraffic_container_image.endswith(':latest') }}"
 
 oxitraffic_container_image_self_build: false
 oxitraffic_container_image_self_build_name: "mo8it/oxitraffic:{{ oxitraffic_container_image_self_build_repo_version }}"
