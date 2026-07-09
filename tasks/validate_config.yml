@@ -38,11 +38,12 @@
     - name: Fail if Traefik settings required for OxiTraffic are not defined
       ansible.builtin.fail:
         msg: >-
-          You need to define a required configuration setting (`{{ item }}`).
-      when: "lookup('vars', item, default='') | string | length == 0"
+          You need to define a required configuration setting (`{{ item.name }}`).
+      when: "item.when | bool and lookup('vars', item.name, default='') | string | length == 0"
       with_items:
-        - oxitraffic_container_labels_traefik_hostname
-        - oxitraffic_container_labels_traefik_path_prefix
+        - { "name": "oxitraffic_container_labels_traefik_hostname", when: true }
+        - { "name": "oxitraffic_container_labels_traefik_path_prefix", when: true }
+        - { "name": "oxitraffic_container_labels_traefik_middleware_basic_auth_users", when: "{{ oxitraffic_container_labels_traefik_middleware_basic_auth_enabled }}" }
 
     - name: Fail if oxitraffic_container_labels_traefik_path_prefix is different than /
       ansible.builtin.fail:
