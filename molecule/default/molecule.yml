@@ -27,13 +27,54 @@ provisioner:
   inventory:
     group_vars:
       all:
+        # Variables for OxiTraffic
         oxitraffic_uid: 1000
         oxitraffic_gid: 1000
         oxitraffic_hostname: oxitraffic
         oxitraffic_container_labels_traefik_enabled: false
         oxitraffic_container_http_host_bind_port: 8080
+
+        # Variables required for OxiTraffic to connect to the Postgres database (via Unix socket)
+        oxitraffic_tracked_origin: https://example.com
+        oxitraffic_database_username: my_database_username
+        oxitraffic_database_password: my_database_password
+        oxitraffic_database_sslmode: disable
+        oxitraffic_database_name: oxitraffic
+        oxitraffic_database_socket_enabled: true
+        oxitraffic_database_socket_path_host: "{{ postgres_run_path }}"
+        oxitraffic_systemd_required_services_list_auto: |
+          {{
+            (['postgres.service'])
+          }}
+
+        # Variables for Postgres
+        postgres_uid: 1000
+        postgres_gid: 1000
+        postgres_connection_password: postgres_password
+        postgres_container_unix_socket_enabled: true
+        postgres_managed_databases: |
+          {{
+            [{
+              'name': oxitraffic_database_name,
+              'username': oxitraffic_database_username,
+              'password': oxitraffic_database_password,
+            }]
+          }}
   env:
     # Workaround for https://github.com/ansible/molecule/issues/4391
     ANSIBLE_ROLES_PATH: ${MOLECULE_PROJECT_DIRECTORY}/..:/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles:~/.ansible/roles
+scenario:
+  # See: https://docs.ansible.com/projects/molecule/configuration/?h=test_sequence#scenario
+  test_sequence:
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    # Disable idempotence test for now due to ansible-role-postgres
+    # - idempotence
+    - verify
+    - cleanup
+    - destroy
 verifier:
   name: ansible

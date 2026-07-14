@@ -16,11 +16,12 @@
       loop:
         - com.devture.ansible.role.playbook_help
         - com.devture.ansible.role.systemd_docker_base
+        - ansible-role-postgres
         - "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
       loop_control:
         loop_var: role_name
 
-- name: Ensure OxiTraffic service is started
+- name: Ensure services are started
   hosts: all
   become: true
   gather_facts: false
@@ -28,6 +29,11 @@
     - name: Ensure systemd daemon is reloaded
       ansible.builtin.systemd_service:
         daemon_reload: true
+
+    - name: Ensure Postgres systemd service is started
+      ansible.builtin.systemd_service:
+        name: postgres.service
+        state: started
 
     - name: Ensure OxiTraffic systemd service is started
       ansible.builtin.systemd_service:
