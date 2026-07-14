@@ -1,0 +1,47 @@
+# SPDX-FileCopyrightText: 2026 Suguru Hirahara
+# SPDX-FileCopyrightText: 2026 spatterlight
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+---
+- name: Verify OxiTraffic systemd service
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Wait for OxiTraffic service to become active (up to 180s)
+      ansible.builtin.systemd:
+        name: oxitraffic.service
+      register: oxitraffic_service
+      until: oxitraffic_service.status.ActiveState == 'active'
+      retries: 36
+      delay: 5
+
+    - name: Assert OxiTraffic service is active
+      ansible.builtin.assert:
+        that: oxitraffic_service.status.ActiveState == 'active'
+        fail_msg: "oxitraffic.service not active ({{ oxitraffic_service.status.ActiveState }})"
+        success_msg: "oxitraffic.service is active"
+
+    - name: Wait for OxiTraffic HTTP endpoint to respond (up to 10m)
+      ansible.builtin.uri:
+        url: "http://localhost:8080/"
+        method: GET
+        status_code: [200, 302]
+        follow_redirects: none
+      register: oxitraffic_endpoint
+      until: oxitraffic_endpoint.status in [200, 302]
+      retries: 120
+      delay: 5
+
+    - name: Assert OxiTraffic HTTP endpoint responds
+      ansible.builtin.assert:
+        that: oxitraffic_endpoint.status in [200, 302]
+        fail_msg: "OxiTraffic did not respond as expected ({{ oxitraffic_endpoint.status | default('no response') }})"
+        success_msg: "OxiTraffic responded with {{ oxitraffic_endpoint.status }}"
+
+    - name: Show OxiTraffic systemd service status summary
+      ansible.builtin.debug:
+        msg:
+          - "OxiTraffic systemd: {{ oxitraffic_service.status.ActiveState }}"
+          - "OxiTraffic HTTP: {{ oxitraffic_endpoint.status }}"
