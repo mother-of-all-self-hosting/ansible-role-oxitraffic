@@ -33,7 +33,8 @@ provisioner:
         # Variables for OxiTraffic
         oxitraffic_uid: 1000
         oxitraffic_gid: 1000
-        oxitraffic_hostname: oxitraffic
+        oxitraffic_scheme: http
+        oxitraffic_hostname: localhost
         oxitraffic_container_labels_traefik_enabled: false
         oxitraffic_container_http_host_bind_port: 8080
 
