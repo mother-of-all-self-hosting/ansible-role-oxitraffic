@@ -23,6 +23,12 @@
         fail_msg: "oxitraffic.service not active ({{ oxitraffic_service.status.ActiveState }})"
         success_msg: "oxitraffic.service is active"
 
+    - name: Retrieve OxiTraffic service log for debugging
+      when: oxitraffic_debug_service_enabled | bool
+      ansible.builtin.command:
+        cmd: journalctl -xeu oxitraffic.service
+      changed_when: false
+
     - name: Wait for OxiTraffic HTTP endpoint to respond (up to 10m)
       ansible.builtin.uri:
         url: "http://localhost:8080/"

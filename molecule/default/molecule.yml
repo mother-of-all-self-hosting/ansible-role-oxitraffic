@@ -27,6 +27,9 @@ provisioner:
   inventory:
     group_vars:
       all:
+        # Helper variables
+        oxitraffic_debug_service_enabled: false
+
         # Variables for OxiTraffic
         oxitraffic_uid: 1000
         oxitraffic_gid: 1000
