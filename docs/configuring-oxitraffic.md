@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2020 Chris van Dijk
 SPDX-FileCopyrightText: 2020 Dominik Zajac
 SPDX-FileCopyrightText: 2020 Mickaël Cornière
 SPDX-FileCopyrightText: 2020-2024 MDAD project contributors
-SPDX-FileCopyrightText: 2020-2024 Slavi Pantaleev
+SPDX-FileCopyrightText: 2020-2024, 2026 Slavi Pantaleev
 SPDX-FileCopyrightText: 2022 François Darveau
 SPDX-FileCopyrightText: 2022 Julian Foad
 SPDX-FileCopyrightText: 2022 Warren Bailey
@@ -80,7 +80,7 @@ Replace `https://origin.example.com` with the hostname of your website.
 
 #### Set variables for the database server
 
-To have the Linkwarden instance connect to your Postgres server, add the following configuration to your `vars.yml` file.
+To have the OxiTraffic instance connect to your Postgres server, add the following configuration to your `vars.yml` file.
 
 ```yaml
 oxitraffic_database_username: YOUR_POSTGRES_SERVER_USERNAME_HERE
@@ -121,6 +121,15 @@ Take a look at:
 
 See the [documentation](https://codeberg.org/mo8it/oxitraffic#configuration) for a complete list of OxiTraffic's config options that you could put in `oxitraffic_environment_variables_additional_variables`.
 
+Any setting of OxiTraffic's configuration file can be given as an environment variable named `OXITRAFFIC_` followed by the setting's name in upper case. For example, to shorten the time a visitor has to stay on a page before the visit is counted (19 seconds by default), add the following configuration to your `vars.yml` file:
+
+```yaml
+oxitraffic_environment_variables_additional_variables: |
+  OXITRAFFIC_MIN_DELAY_SECS=5
+```
+
+**Note**: an environment variable takes precedence over the configuration file this role renders, so avoid setting ones that the role already manages (such as `OXITRAFFIC_SOCKET_ADDRESS`) — doing so would make OxiTraffic disagree with the port the container publishes.
+
 ## Installing
 
 After configuring the playbook, run the installation command of your playbook as below:
@@ -145,4 +154,13 @@ To have your OxiTraffic instance count visits at `https://origin.example.com`, y
 
 ### Check the service's logs
 
-Internal OxiTraffic errors will not be logged to `stdout` and will therefore not be part of `journalctl -fu mash-oxitraffic`. Its log can be checked by running `tail -f logs/oxitraffic`.
+OxiTraffic logs to `stdout`, so its log is part of the service's journal and can be followed with `journalctl -fu mash-oxitraffic`.
+
+To raise the log level, set the `RUST_LOG` environment variable through `oxitraffic_environment_variables_additional_variables` in your `vars.yml` file:
+
+```yaml
+oxitraffic_environment_variables_additional_variables: |
+  RUST_LOG=debug
+```
+
+**Note**: OxiTraffic wrote to a log directory of its own until version 0.10.0, which removed the `logs_dir` setting in favour of logging to `stdout`. Nothing is written to the `logs/` directory the role still creates.
