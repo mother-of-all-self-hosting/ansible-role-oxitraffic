@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2026 Slavi Pantaleev
 # SPDX-FileCopyrightText: 2026 spatterlight
 # SPDX-FileCopyrightText: 2026 Suguru Hirahara
 #
@@ -31,16 +32,44 @@ provisioner:
         # Helper variables
         oxitraffic_debug_service_enabled: false
 
+        # Names the converge and verify plays need to address directly.
+        # The stub website carries both the role and the scenario, like the
+        # platform container does, so that parallel scenarios cannot collide
+        # over it and a leftover container is never mistaken for another one's.
+        oxitraffic_molecule_container: oxitraffic
+        oxitraffic_molecule_network: oxitraffic
+        oxitraffic_molecule_postgres_container: postgres
+        oxitraffic_molecule_postgres_superuser: root
+        oxitraffic_molecule_tracked_site_container: oxitraffic-molecule-default-tracked-site
+        oxitraffic_molecule_tracked_site_image: docker.io/traefik/whoami:v1.11.0
+
         # Variables for OxiTraffic
         oxitraffic_uid: 1000
         oxitraffic_gid: 1000
         oxitraffic_scheme: http
-        oxitraffic_hostname: localhost
+        # Distinctive on purpose. It is what OxiTraffic bakes into the
+        # tracking script it serves, so finding it there is proof that the
+        # role's rendered config.toml reached the process.
+        oxitraffic_hostname: oxitraffic.molecule.test
         oxitraffic_container_labels_traefik_enabled: false
-        oxitraffic_container_http_host_bind_port: 8080
+        # Neither OxiTraffic's own default (80, which is what it listens on
+        # when no config file reaches it) nor the role's default (8080). A
+        # process answering here can only have been told to by the role.
+        oxitraffic_container_http_port: 8129
+        oxitraffic_container_http_host_bind_port: 8129
+
+        # The website whose traffic is being tracked. OxiTraffic refuses to
+        # start unless it can fetch the callback URL, and refuses to register a
+        # path it cannot find there, so this has to be something that answers.
+        # A stub container on OxiTraffic's own network is used rather than a
+        # real website: reaching out to the public internet from CI made the
+        # scenario depend on a third party being up, and Docker 28+ blocks
+        # container-to-host-port traffic over the bridge gateway, so the stub
+        # has to live on the container network either way.
+        oxitraffic_tracked_origin: https://tracked.molecule.test
+        oxitraffic_tracked_origin_callback: http://oxitraffic-molecule-default-tracked-site
 
         # Variables required for OxiTraffic to connect to the Postgres database (via Unix socket)
-        oxitraffic_tracked_origin: https://example.com
         oxitraffic_database_username: my_database_username
         oxitraffic_database_password: my_database_password
         oxitraffic_database_sslmode: disable

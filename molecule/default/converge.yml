@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2026 Slavi Pantaleev
 # SPDX-FileCopyrightText: 2026 spatterlight
 # SPDX-FileCopyrightText: 2026 Suguru Hirahara
 #
@@ -34,6 +35,30 @@
       ansible.builtin.systemd_service:
         name: postgres.service
         state: started
+
+    # OxiTraffic fetches the tracked website once at startup and refuses to
+    # come up if it does not answer, so this has to exist before the service
+    # is started rather than alongside the rest of the verification.
+    #
+    # `traefik/whoami` answers 200 on every path, which is what makes it usable
+    # as a stand-in for a tracked website: registering a page view makes
+    # OxiTraffic look that very path up on the website first.
+    #
+    # The docker CLI is used rather than `community.docker.*`, because the lint
+    # environment CI runs has no collections beyond the built-in ones.
+    - name: Ensure no stale tracked website stub is left over
+      ansible.builtin.command:
+        cmd: "docker rm -f {{ oxitraffic_molecule_tracked_site_container }}"
+      changed_when: true
+
+    - name: Ensure the tracked website stub is running on OxiTraffic's network
+      ansible.builtin.command:
+        cmd: >-
+          docker run --detach
+          --name {{ oxitraffic_molecule_tracked_site_container }}
+          --network {{ oxitraffic_molecule_network }}
+          {{ oxitraffic_molecule_tracked_site_image }}
+      changed_when: true
 
     - name: Ensure OxiTraffic systemd service is started
       ansible.builtin.systemd_service:
