@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2023 Slavi Pantaleev
+SPDX-FileCopyrightText: 2023, 2026 Slavi Pantaleev
 SPDX-FileCopyrightText: 2025, 2026 Suguru Hirahara
 
 SPDX-License-Identifier: AGPL-3.0-or-later
@@ -35,3 +35,12 @@ just prek-install-git-pre-commit-hook
 This role supports [Molecule](https://docs.ansible.com/projects/molecule/), an Ansible testing framework designed for developing and testing Ansible collections, playbooks, and roles.
 
 Refer to [this page](./molecule/README.md) for details about how to utilize it.
+
+### Releases
+
+Tags are cut automatically, and are derived from the state of the repository rather than from commit messages. [`bin/compute-next-tag.sh`](./bin/compute-next-tag.sh) reads `oxitraffic_version` out of [`defaults/main.yml`](./defaults/main.yml) and compares it against the tags that already exist:
+
+- a version that has never been released starts a new counter (`v0.10.6-0`);
+- otherwise the counter is incremented (`v0.10.5-7`), but only when something under `defaults/`, `meta/`, `tasks/` or `templates/` has changed since the previous release. A commit that only touches documentation, CI or the Molecule scenarios does not produce a release.
+
+Because the result depends only on the checked-out state, it does not matter in which order pull requests get merged, and any change to the role — a bugfix as much as a dependency bump — releases itself. [`bin/test-compute-next-tag.sh`](./bin/test-compute-next-tag.sh) exercises this against throwaway repositories, and runs as a prek hook whenever the script or `defaults/main.yml` changes.
