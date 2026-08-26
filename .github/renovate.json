@@ -9,6 +9,6 @@
     "Tag hygiene needs no local override. docker.io/mo8it/oxitraffic publishes plain vX.Y.Z tags with no flavour or architecture suffixes, so `versioning=semver` on the annotation in defaults/main.yml resolves them directly; the floating `latest` tag is not a version and is ignored. Renovate has been tracking this correctly - it raised the v0.10.4 to v0.10.5 bump a day after the tag appeared."
   ],
   "extends": [
-    "github>mother-of-all-self-hosting/renovate-config#v1.0.0"
+    "github>mother-of-all-self-hosting/renovate-config#v1.1.0"
   ]
 }
