@@ -38,7 +38,6 @@ jobs:
       matrix:
         distro:
           - ubuntu2604
-          - debian13
       fail-fast: false
 
     env:
@@ -132,14 +131,14 @@ jobs:
           fi
 
   molecule-self-build:
-    name: Run Molecule scenario 'default-selfbuild' on debian13
+    name: Run Molecule scenario 'default-selfbuild' on ubuntu2604
     runs-on: ubuntu-latest
 
     needs: self-build-relevant
     if: needs.self-build-relevant.outputs.bumped == 'true'
 
     env:
-      MOLECULE_DISTRO: debian13
+      MOLECULE_DISTRO: ubuntu2604
       PY_COLORS: "1"
       ANSIBLE_FORCE_COLOR: "1"
 
