@@ -72,11 +72,11 @@ jobs:
         working-directory: oxitraffic
         run: molecule test --scenario-name default
 
-  # The self-build scenario compiles OxiTraffic from source, which takes the
-  # better part of half an hour of runner time and exercises upstream's
-  # Containerfile rather than anything this role renders. It is only worth
-  # spending that when the version being built has actually changed - or when
-  # somebody asks for it by hand.
+  # Self-building compiles OxiTraffic from the tag that `oxitraffic_version`
+  # points at, so it only changes behavior when that version changes. Branches
+  # are therefore gated on a version bump in defaults/main.yml. There is no
+  # main-branch run at all: automerge only merges branches that are already
+  # green, so a main-side rerun would be redundant.
   self-build-relevant:
     name: Check whether the OxiTraffic version changed
     runs-on: ubuntu-latest
