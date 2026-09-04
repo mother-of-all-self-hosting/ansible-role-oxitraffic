@@ -10,7 +10,7 @@
 # revision `oxitraffic_version` names, and that what came out of that build
 # reports itself as that same version and can actually count a page view.
 ---
-- name: Verify a self-built OxiTraffic
+- name: Verify self-built OxiTraffic
   hosts: all
   become: true
   gather_facts: false
