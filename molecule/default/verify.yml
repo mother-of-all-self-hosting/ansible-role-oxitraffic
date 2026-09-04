@@ -217,15 +217,8 @@
         that:
           - (oxitraffic_defaults.oxitraffic_version ~ ' - <a href="https://codeberg.org/mo8it/oxitraffic"') in oxitraffic_dashboard.content
           - (oxitraffic_container.Config.Image | split(':') | last) == oxitraffic_defaults.oxitraffic_version
-        fail_msg: >-
-          The dashboard footer reports
-          {{ oxitraffic_dashboard.content | regex_search('v[0-9][0-9.]* - <a href="https://codeberg.org/mo8it/oxitraffic"') | default('no version at all', true) }}
-          out of image {{ oxitraffic_container.Config.Image }}, but `oxitraffic_version`
-          pins {{ oxitraffic_defaults.oxitraffic_version }}
-        success_msg: >-
-          The running OxiTraffic reports itself as {{ oxitraffic_defaults.oxitraffic_version }}
-          in its dashboard footer, out of {{ oxitraffic_container.Config.Image }}, which is
-          what `oxitraffic_version` pins
+        fail_msg: "OxiTraffic reports {{ oxitraffic_dashboard.content | regex_search('v[0-9][0-9.]* - <a href=\"https://codeberg.org/mo8it/oxitraffic\"') | default('none') }}, expected {{ oxitraffic_defaults.oxitraffic_version }}"
+        success_msg: "OxiTraffic reports {{ oxitraffic_dashboard.content | regex_search('v[0-9][0-9.]* - <a href=\"https://codeberg.org/mo8it/oxitraffic\"') }}"
 
     # ------------------------------------------------------------------
     # Configuration reaches the process, not just the files on disk
