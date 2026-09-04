@@ -42,11 +42,10 @@
     oxitraffic_verify_min_delay_seconds: 20
 
   tasks:
-    # Role defaults are not in scope in a verify play, but the version Renovate
-    # bumps lives in them and is what the running container is checked against
-    # below. Only leaf literals may be read out of this - anything Jinja-derived
-    # would be resolved against an empty namespace.
-    - name: Load the OxiTraffic role defaults
+    # The role is not included in this playbook, so its defaults are not in
+    # scope. Reading defaults/main.yml directly ties the version assertion
+    # below.
+    - name: Load the role defaults
       ansible.builtin.include_vars:
         file: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/defaults/main.yml"
         name: oxitraffic_defaults

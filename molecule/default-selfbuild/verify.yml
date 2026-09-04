@@ -33,7 +33,10 @@
     oxitraffic_verify_min_delay_seconds: 20
 
   tasks:
-    - name: Load the OxiTraffic role defaults
+    # The role is not included in this playbook, so its defaults are not in
+    # scope. Reading defaults/main.yml directly ties the version assertion
+    # below.
+    - name: Load the role defaults
       ansible.builtin.include_vars:
         file: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/defaults/main.yml"
         name: oxitraffic_defaults
