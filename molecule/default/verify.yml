@@ -453,12 +453,12 @@
     - name: Show the OxiTraffic verification summary
       ansible.builtin.debug:
         msg:
-          - "systemd: {{ oxitraffic_service.status.ActiveState }}, restarts {{ oxitraffic_restarts_after.status.NRestarts }}"
-          - "unconfigured image: exited rc={{ oxitraffic_stock_control.rc }}"
-          - "no Postgres socket: exited rc={{ oxitraffic_dbless_control.rc }}"
-          - "no tracked website: exited rc={{ oxitraffic_offline_control.rc }}"
-          - "dashboard: {{ oxitraffic_dashboard.status }} on port {{ oxitraffic_container_http_port }}"
-          - "version: {{ oxitraffic_defaults.oxitraffic_version }} from {{ oxitraffic_container.Config.Image }}"
-          - "count.js: base {{ oxitraffic_scheme }}://{{ oxitraffic_hostname }}, origin {{ oxitraffic_count_js.access_control_allow_origin }}"
-          - "round trip: registered, refused early report {{ oxitraffic_hasty_report.status }}, counted {{ oxitraffic_count_after.content | trim }} (absent page {{ oxitraffic_count_absent.content | trim }})"
-          - "postgres ({{ oxitraffic_database_name }}): {{ oxitraffic_postgres_visits.stdout | trim }}"
+          - "OxiTraffic systemd: {{ oxitraffic_service.status.ActiveState }}, restarts {{ oxitraffic_restarts_after.status.NRestarts }}"
+          - "OxiTraffic version: {{ oxitraffic_defaults.oxitraffic_version }} from {{ oxitraffic_container.Config.Image }}"
+          - "OxiTraffic unconfigured image: exited rc={{ oxitraffic_stock_control.rc }}"
+          - "OxiTraffic no Postgres socket: exited rc={{ oxitraffic_dbless_control.rc }}"
+          - "OxiTraffic no tracked website: exited rc={{ oxitraffic_offline_control.rc }}"
+          - "OxiTraffic dashboard: {{ oxitraffic_dashboard.status }} on port {{ oxitraffic_container_http_port }}"
+          - "OxiTraffic count.js: base {{ oxitraffic_scheme }}://{{ oxitraffic_hostname }}, origin {{ oxitraffic_count_js.access_control_allow_origin }}"
+          - "OxiTraffic round trip: registered, refused early report {{ oxitraffic_hasty_report.status }}, counted {{ oxitraffic_count_after.content | trim }} (absent page {{ oxitraffic_count_absent.content | trim }})"
+          - "OxiTraffic postgres ({{ oxitraffic_database_name }}): {{ oxitraffic_postgres_visits.stdout | trim }}"

@@ -306,13 +306,13 @@
           oxitraffic.service has never restarted
           ({{ oxitraffic_restarts_after.status.NRestarts }})
 
-    - name: Show the self-build verification summary
+    - name: Show the OxiTraffic verification summary
       ansible.builtin.debug:
         msg:
-          - "systemd: {{ oxitraffic_service.status.ActiveState }}, restarts {{ oxitraffic_restarts_after.status.NRestarts }}"
-          - "image: {{ oxitraffic_container.Config.Image }}, registry digests {{ oxitraffic_image.RepoDigests | default([]) | length }}"
-          - "source: {{ oxitraffic_molecule_src_path }} at {{ oxitraffic_src_head.stdout | trim }} ({{ oxitraffic_defaults.oxitraffic_version }})"
-          - "unconfigured image: exited rc={{ oxitraffic_stock_control.rc }}"
-          - "dashboard: {{ oxitraffic_dashboard.status }} on port {{ oxitraffic_container_http_port }}"
-          - "count.js: base {{ oxitraffic_scheme }}://{{ oxitraffic_hostname }}, origin {{ oxitraffic_count_js.access_control_allow_origin }}"
-          - "postgres ({{ oxitraffic_database_name }}): {{ oxitraffic_postgres_visits.stdout | trim }}"
+          - "OxiTraffic systemd: {{ oxitraffic_service.status.ActiveState }}, restarts {{ oxitraffic_restarts_after.status.NRestarts }}"
+          - "OxiTraffic image: {{ oxitraffic_container.Config.Image }}, registry digests {{ oxitraffic_image.RepoDigests | default([]) | length }}"
+          - "OxiTraffic source: {{ oxitraffic_molecule_src_path }} at {{ oxitraffic_src_head.stdout | trim }} ({{ oxitraffic_defaults.oxitraffic_version }})"
+          - "OxiTraffic unconfigured image: exited rc={{ oxitraffic_stock_control.rc }}"
+          - "OxiTraffic dashboard: {{ oxitraffic_dashboard.status }} on port {{ oxitraffic_container_http_port }}"
+          - "OxiTraffic count.js: base {{ oxitraffic_scheme }}://{{ oxitraffic_hostname }}, origin {{ oxitraffic_count_js.access_control_allow_origin }}"
+          - "OxiTraffic postgres ({{ oxitraffic_database_name }}): {{ oxitraffic_postgres_visits.stdout | trim }}"
