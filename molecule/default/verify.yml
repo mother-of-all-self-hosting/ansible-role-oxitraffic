@@ -176,14 +176,20 @@
       until: oxitraffic_service.status.ActiveState == 'active'
       retries: 36
       delay: 5
+      # So that giving up is reported by the assertion below rather than as a
+      # wall of systemd unit properties.
+      failed_when: false
 
+    # `Restart=always` in the systemd unit means that even a container which crashes
+    # and gets restarted reads as active here, so this is a precondition rather than
+    # a result.
     - name: Assert the OxiTraffic systemd service is active
       ansible.builtin.assert:
         that: oxitraffic_service.status.ActiveState == 'active'
         fail_msg: "oxitraffic.service is not active ({{ oxitraffic_service.status.ActiveState }})"
         success_msg: "oxitraffic.service is active"
 
-    - name: Retrieve the OxiTraffic service log for debugging
+    - name: Retrieve the OxiTraffic systemd service log for debugging
       when: oxitraffic_debug_service_enabled | bool
       ansible.builtin.command:
         cmd: journalctl -xeu oxitraffic.service
