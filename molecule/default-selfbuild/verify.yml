@@ -44,13 +44,13 @@
     # `--type container` is not optional here: the role gives the container and
     # the container network the same name, and a bare `docker inspect` answers
     # with whichever it finds first.
-    - name: Read the OxiTraffic container the role created
+    - name: Inspect OxiTraffic container
       ansible.builtin.command:
         cmd: "docker inspect --type container {{ oxitraffic_molecule_container }}"
       register: oxitraffic_container_raw
       changed_when: false
 
-    - name: Make sense of the OxiTraffic container
+    - name: Parse the OxiTraffic container definition
       ansible.builtin.set_fact:
         oxitraffic_container: "{{ (oxitraffic_container_raw.stdout | from_json)[0] }}"
 
@@ -64,7 +64,7 @@
       register: oxitraffic_image_raw
       changed_when: false
 
-    - name: Make sense of the OxiTraffic image
+    - name: Parse the OxiTraffic image definition
       ansible.builtin.set_fact:
         oxitraffic_image: "{{ (oxitraffic_image_raw.stdout | from_json)[0] }}"
 
