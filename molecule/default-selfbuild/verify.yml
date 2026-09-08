@@ -321,7 +321,7 @@
     - name: Show the OxiTraffic verification summary
       ansible.builtin.debug:
         msg:
-          - "OxiTraffic systemd: {{ oxitraffic_service.status.ActiveState }}, restarts {{ oxitraffic_restarts_after.status.NRestarts }}"
+          - "OxiTraffic systemd: {{ oxitraffic_service.status.ActiveState }}, {{ oxitraffic_service_after.status.NRestarts }} restart(s)"
           - "OxiTraffic image: {{ oxitraffic_container.Config.Image }}, registry digests {{ oxitraffic_image.RepoDigests | default([]) | length }}"
           - "OxiTraffic source: {{ oxitraffic_molecule_src_path }} at {{ oxitraffic_src_head.stdout | trim }} ({{ oxitraffic_defaults.oxitraffic_version }})"
           - "OxiTraffic unconfigured image: exited rc={{ oxitraffic_stock_control.rc }}"

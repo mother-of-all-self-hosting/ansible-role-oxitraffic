@@ -452,7 +452,7 @@
     - name: Show the OxiTraffic verification summary
       ansible.builtin.debug:
         msg:
-          - "OxiTraffic systemd: {{ oxitraffic_service.status.ActiveState }}, restarts {{ oxitraffic_restarts_after.status.NRestarts }}"
+          - "OxiTraffic systemd: {{ oxitraffic_service.status.ActiveState }}, {{ oxitraffic_service_after.status.NRestarts }} restart(s)"
           - "OxiTraffic version: {{ oxitraffic_defaults.oxitraffic_version }} from {{ oxitraffic_container.Config.Image }}"
           - "OxiTraffic unconfigured image: exited rc={{ oxitraffic_stock_control.rc }}"
           - "OxiTraffic no Postgres socket: exited rc={{ oxitraffic_dbless_control.rc }}"
