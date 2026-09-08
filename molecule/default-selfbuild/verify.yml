@@ -304,19 +304,19 @@
     - name: Sample the OxiTraffic restart counter again
       ansible.builtin.systemd_service:
         name: oxitraffic.service
-      register: oxitraffic_restarts_after
+      register: oxitraffic_service_after
 
     - name: Assert the self-built OxiTraffic never restarted
       ansible.builtin.assert:
         that:
-          - oxitraffic_restarts_after.status.NRestarts == oxitraffic_restarts_before.status.NRestarts
-          - (oxitraffic_restarts_after.status.NRestarts | int) == 0
+          - oxitraffic_service_after.status.NRestarts == oxitraffic_restarts_before.status.NRestarts
+          - (oxitraffic_service_after.status.NRestarts | int) == 0
         fail_msg: >-
           oxitraffic.service restarted ({{ oxitraffic_restarts_before.status.NRestarts }} to
-          {{ oxitraffic_restarts_after.status.NRestarts }}), so `active` was hiding a crash loop
+          {{ oxitraffic_service_after.status.NRestarts }}), so `active` was hiding a crash loop
         success_msg: >-
           oxitraffic.service has never restarted
-          ({{ oxitraffic_restarts_after.status.NRestarts }})
+          ({{ oxitraffic_service_after.status.NRestarts }})
 
     - name: Show the OxiTraffic verification summary
       ansible.builtin.debug:
