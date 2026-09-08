@@ -165,7 +165,7 @@
     - name: Retrieve the OxiTraffic systemd service log for debugging
       when: oxitraffic_debug_service_enabled | bool
       ansible.builtin.command:
-        cmd: journalctl -xeu oxitraffic.service
+        cmd: journalctl --no-pager --output=cat --unit=oxitraffic.service
       changed_when: false
 
     - name: Wait for the self-built OxiTraffic to serve its dashboard (up to 5m)
