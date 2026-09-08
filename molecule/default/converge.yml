@@ -54,7 +54,7 @@
     - name: Ensure the tracked website stub is running on OxiTraffic's network
       ansible.builtin.command:
         cmd: >-
-          docker run --detach
+          docker run -d
           --name {{ oxitraffic_molecule_tracked_site_container }}
           --network {{ oxitraffic_molecule_network }}
           {{ oxitraffic_molecule_tracked_site_image }}
