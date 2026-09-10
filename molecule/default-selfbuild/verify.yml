@@ -33,6 +33,8 @@
     oxitraffic_verify_min_delay_seconds: 20
 
   tasks:
+    - name: Verify that OxiTraffic works
+      block:
     # The role is not included in this playbook, so its defaults are not in
     # scope. Reading defaults/main.yml directly ties the version assertion
     # below.
@@ -328,3 +330,19 @@
           - "OxiTraffic dashboard: {{ oxitraffic_dashboard.status }} on port {{ oxitraffic_container_http_port }}"
           - "OxiTraffic count.js: base {{ oxitraffic_scheme }}://{{ oxitraffic_hostname }}, origin {{ oxitraffic_count_js.access_control_allow_origin }}"
           - "OxiTraffic postgres ({{ oxitraffic_database_name }}): {{ oxitraffic_postgres_visits.stdout | trim }}"
+
+      rescue:
+        # Whatever went wrong, the reason is almost always in the systemd service log.
+        - name: Retrieve the OxiTraffic systemd service log
+          ansible.builtin.command:
+            cmd: journalctl --no-pager --output=cat --unit=oxitraffic.service
+          register: oxitraffic_service_log
+          changed_when: false
+
+        - name: Show the OxiTraffic systemd service log
+          ansible.builtin.debug:
+            var: oxitraffic_service_log.stdout_lines
+
+        - name: Fail because verification did not pass
+          ansible.builtin.fail:
+            msg: "OxiTraffic verification failed. The systemd service log is printed above."
