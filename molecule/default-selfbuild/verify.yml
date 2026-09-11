@@ -32,6 +32,10 @@
     # ago, which defaults to 19 and which the role does not currently override.
     oxitraffic_verify_min_delay_seconds: 20
 
+    oxitraffic_verify_units:
+      - oxitraffic.service
+      - postgres.service
+
   tasks:
     - name: Verify that OxiTraffic works
       block:
@@ -144,13 +148,14 @@
         # What was built runs, and reports itself as what was asked for
         # ------------------------------------------------------------------
 
-        - name: Wait for the OxiTraffic systemd service to become active (up to 180s)
+        - name: Wait for the OxiTraffic systemd services to become active (up to 180s each)
           ansible.builtin.systemd_service:
-            name: oxitraffic.service
-          register: oxitraffic_service
-          until: oxitraffic_service.status.ActiveState == 'active'
+            name: "{{ item }}"
+          register: oxitraffic_services
+          until: oxitraffic_services.status.ActiveState == 'active'
           retries: 36
           delay: 5
+          loop: "{{ oxitraffic_verify_units }}"
           # So that giving up is reported by the assertion below rather than as a
           # wall of systemd unit properties.
           failed_when: false
@@ -158,17 +163,20 @@
         # `Restart=always` in the systemd unit means that even a container which crashes
         # and gets restarted reads as active here, so this is a precondition rather than
         # a result.
-        - name: Assert the OxiTraffic systemd service is active
+        - name: Assert the OxiTraffic systemd services are active
           ansible.builtin.assert:
-            that: oxitraffic_service.status.ActiveState == 'active'
-            fail_msg: "oxitraffic.service is not active ({{ oxitraffic_service.status.ActiveState }})"
-            success_msg: "oxitraffic.service is active"
+            that: oxitraffic_services.results | map(attribute='status.ActiveState') | unique | list == ['active']
+            fail_msg: >-
+              Not every service is active:
+              {{ dict(oxitraffic_verify_units | zip(oxitraffic_services.results | map(attribute='status.ActiveState'))) }}
+            success_msg: "Every systemd service is active"
 
-        - name: Retrieve the OxiTraffic systemd service log for debugging
+        - name: Retrieve the OxiTraffic systemd services log for debugging
           when: oxitraffic_debug_service_enabled | bool
           ansible.builtin.command:
-            cmd: journalctl --no-pager --output=cat --unit=oxitraffic.service
+            cmd: "journalctl --no-pager --output=cat --unit={{ item }}"
           changed_when: false
+          loop: "{{ oxitraffic_verify_units }}"
 
         - name: Wait for the self-built OxiTraffic to serve its dashboard (up to 5m)
           ansible.builtin.uri:
@@ -323,7 +331,7 @@
         - name: Show the OxiTraffic verification summary
           ansible.builtin.debug:
             msg:
-              - "OxiTraffic systemd: {{ oxitraffic_service.status.ActiveState }}, {{ oxitraffic_service_after.status.NRestarts }} restart(s)"
+              - "OxiTraffic systemd: {% for unit, state in oxitraffic_verify_units | zip(oxitraffic_services.results | map(attribute='status.ActiveState')) %}{{ unit }} ({{ state }}){% if not loop.last %}, {% endif %}{% endfor %}"
               - "OxiTraffic image: {{ oxitraffic_container.Config.Image }}, registry digests {{ oxitraffic_image.RepoDigests | default([]) | length }}"
               - "OxiTraffic source: {{ oxitraffic_molecule_src_path }} at {{ oxitraffic_src_head.stdout | trim }} ({{ oxitraffic_defaults.oxitraffic_version }})"
               - "OxiTraffic unconfigured image: exited rc={{ oxitraffic_stock_control.rc }}"
