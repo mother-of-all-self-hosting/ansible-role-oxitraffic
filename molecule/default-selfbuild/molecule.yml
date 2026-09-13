@@ -31,6 +31,7 @@ provisioner:
       all:
         # Helper variables
         oxitraffic_debug_service_enabled: false
+        oxitraffic_restarts_check_enabled: true
 
         # Names the converge and verify plays need to address directly.
         # The stub website carries both the role and the scenario, like the
