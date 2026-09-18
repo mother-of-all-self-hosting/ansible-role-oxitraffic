@@ -119,7 +119,7 @@ Take a look at:
 
 - [`defaults/main.yml`](../defaults/main.yml) for some variables that you can customize via your `vars.yml` file. You can override settings (even those that don't have dedicated playbook variables) using the `oxitraffic_environment_variables_additional_variables` variable
 
-See the [documentation](https://codeberg.org/mo8it/oxitraffic#configuration) for a complete list of OxiTraffic's config options that you could put in `oxitraffic_environment_variables_additional_variables`.
+See the [documentation](https://codeberg.org/mo8it/oxitraffic#configuration) for a complete list of OxiTraffic's config options that you can put in `oxitraffic_environment_variables_additional_variables`.
 
 Any setting of OxiTraffic's configuration file can be given as an environment variable named `OXITRAFFIC_` followed by the setting's name in upper case. For example, to shorten the time a visitor has to stay on a page before the visit is counted (19 seconds by default), add the following configuration to your `vars.yml` file:
 
