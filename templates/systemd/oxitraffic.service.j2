@@ -43,7 +43,10 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
       {% for arg in oxitraffic_container_extra_arguments %}
       {{ arg }} \
       {% endfor %}
-      {{ oxitraffic_container_image_self_build_name if oxitraffic_container_image_self_build else oxitraffic_container_image }}
+      {{ oxitraffic_container_image_self_build_name if oxitraffic_container_image_self_build else oxitraffic_container_image }} \
+      {% for arg in oxitraffic_process_extra_arguments %}
+      {{ arg }} \
+      {% endfor %}
 
 {% for network in oxitraffic_container_additional_networks %}
 ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} network connect {{ network }} {{ oxitraffic_identifier }}
