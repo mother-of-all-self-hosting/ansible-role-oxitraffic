@@ -74,22 +74,24 @@
           ansible.builtin.set_fact:
             oxitraffic_image: "{{ (oxitraffic_image_raw.stdout | from_json)[0] }}"
 
-        # A pulled image carries the digest of the registry manifest it came from.
-        # A locally built one has nothing to carry, so an empty `RepoDigests` is
-        # what separates `oxitraffic_container_image_self_build: true` having done
-        # something from the role having quietly downloaded the published image.
+        # A pulled image carries the time upstream built it. A locally built one was
+        # created during this test run, which is what separates
+        # `oxitraffic_container_image_self_build: true` having done something from
+        # the role having quietly downloaded the published image. Repository digests
+        # cannot tell the two apart: Docker's containerd image store records one for
+        # local builds too.
         - name: Assert the OxiTraffic image was built here rather than pulled
           ansible.builtin.assert:
             that:
-              - (oxitraffic_image.RepoDigests | default([]) | length) == 0
+              - (now(utc=true) - (oxitraffic_image.Created[:19] | to_datetime('%Y-%m-%dT%H:%M:%S'))).total_seconds() < 3600
               - oxitraffic_container.Config.Image is not search('/mo8it/')
             fail_msg: >-
               {{ oxitraffic_container.Config.Image }} came from a registry
-              ({{ oxitraffic_image.RepoDigests | default([]) }}), so this scenario tested the
+              (created at {{ oxitraffic_image.Created }}), so this scenario tested the
               published image rather than the self-building path it exists to cover
             success_msg: >-
-              {{ oxitraffic_container.Config.Image }} has no registry digest and no registry
-              prefix, so it was built on this host out of the role's own source checkout
+              {{ oxitraffic_container.Config.Image }} was created during this test run and has
+              no registry prefix, so it was built on this host out of the role's own source checkout
 
         # `ansible.builtin.git` clones and checks out; these two only want to read
         # what the role's own checkout ended up at, which the module cannot do.
