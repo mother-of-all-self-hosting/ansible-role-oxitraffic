@@ -29,7 +29,7 @@ permissions:
 jobs:
   molecule:
     name: Run Molecule scenario 'default' on ${{ matrix.distro }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     # Same-repository pull requests already run via the push event;
     # run pull_request jobs only for pull requests from forks.
@@ -82,7 +82,7 @@ jobs:
   # green, so a main-side rerun would be redundant.
   self-build-relevant:
     name: Check whether the OxiTraffic version changed
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     if: >-
       github.event_name != 'pull_request'
@@ -135,7 +135,7 @@ jobs:
 
   molecule-self-build:
     name: Run Molecule scenario 'default-selfbuild' on ubuntu2604
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     needs: self-build-relevant
     if: needs.self-build-relevant.outputs.bumped == 'true'
