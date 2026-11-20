@@ -24,9 +24,6 @@
   with_items:
     - { "name": "oxitraffic_uid", when: true }
     - { "name": "oxitraffic_gid", when: true }
-    - { "name": "oxitraffic_hostname", when: true }
-    - { "name": "oxitraffic_path_prefix", when: true }
-    - { "name": "oxitraffic_container_network", when: true }
     - { "name": "oxitraffic_database_socket_path_host", when: "{{ oxitraffic_database_socket_enabled }}" }
     - { "name": "oxitraffic_database_hostname", when: "{{ not oxitraffic_database_socket_enabled }}" }
     - { "name": "oxitraffic_database_password", when: true }
