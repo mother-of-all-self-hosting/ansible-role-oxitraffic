@@ -218,7 +218,7 @@ oxitraffic_container_cleanup_command: |
   echo "Failed to remove stale container {{ oxitraffic_identifier }} after {{ oxitraffic_container_cleanup_timeout_seconds }} attempts" >&2;
   exit 1
 
-oxitraffic_config_base_url: "{{ oxitraffic_scheme }}://{{ oxitraffic_hostname }}"
+oxitraffic_config_base_url: "{{ oxitraffic_scheme }}://{{ oxitraffic_hostname }}{% if oxitraffic_path_prefix != '/' %}{{ oxitraffic_path_prefix }}{% endif %}"
 
 # Example: "https://oxitraffic.example.com"
 oxitraffic_tracked_origin: ""
