@@ -26,7 +26,7 @@
         state: absent
 
     - name: Ensure OxiTraffic container network does not exist
-      when: oxitraffic_container_network_deletion_enabled
+      when: oxitraffic_container_network_deletion_enabled and oxitraffic_container_network != 'host'
       block:
         - name: Ensure OxiTraffic container network does not exist via community.docker.docker_network
           when: devture_systemd_docker_base_container_network_creation_method == 'ansible-module'
